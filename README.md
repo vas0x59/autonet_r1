@@ -15,7 +15,12 @@
      \/__/         \/__/                       \/__/         \/__/         \/__/                  
 
 ```
-
+### Архитектура 
+#### TODO
+### FILES
+#### TODO
+### Roadmap
+#### TODO
 
 by Vasily, Viktor, Dmitrii, Georgy
 ```
