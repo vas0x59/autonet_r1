@@ -20,9 +20,15 @@
 
 ### FILES
 #### TODO
+### Hardware
+ - Ardunio Mega 2560 (more pins) or Arduino M0 (faster) or both)))
+ - Raspberry pi 3b or 3b+
+ - Camera 2x 
+ - Range finders (Sharp or Ping or simple HC04)
+ - Simple i2c lcd screan for fast debug 
+ - Power supply !!! (for servos and for rpi)
 
 ### Roadmap
- 
  - lanes detector
  - turns
  - crossroads
@@ -31,6 +37,10 @@
  - payload delivery
  - parking
  - obstacles avoidance
+ - debug tool
+ - rviz?
+ - urdf?
+
 ### Code style
 #### PYTHON!!!!!!! LINUX!!!!!!!
  - все радикальные изменения делаем в отдельной ветке !!!
@@ -40,6 +50,8 @@
  - раскидываем все по папкам !!!
  - называть файлы нормльно (а не qwertyBuration-er_werpqsxwfec.py) !!!
  - все что сделали описывайте в changlog
+ - реализовывать код в виде мат моделей узлов (манипулятор и колесная база)(все параметры в конфиги))))
+ 
 \
 \
 \
