@@ -15,9 +15,8 @@
      \/__/         \/__/                       \/__/         \/__/         \/__/        liom  2020
 
 ```
-### Архитектура 
-#### TODO
-
+### Topics
+emergency_main Bool - аварийная остановка
 ### FILES
 #### TODO
 ### Arduino
@@ -53,7 +52,10 @@ https://github.com/vas59/autonet_arduino
  - называть файлы нормльно (а не raaxcsdsline_qwertyBuratino-er_werpqsxwfec.py, q1.py, sdfsd23.py) !!!
  - все что сделали описывайте в changlog
  - реализовывать код в виде мат моделей узлов (манипулятор и колесная база)(все параметры в конфиги))))
- 
+
+### Архитектура 
+#### TODO
+
 \
 \
 \
