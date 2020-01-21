@@ -30,6 +30,7 @@
  - navigation
  - payload delivery
  - parking
+ - obstacles avoidance
 ### Code style
 #### PYTHON!!!!!!! LINUX!!!!!!!
  - все радикальные изменения делаем в отдельной ветке !!!
