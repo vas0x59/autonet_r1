@@ -20,6 +20,8 @@
 
 ### FILES
 #### TODO
+### Arduino
+https://github.com/vas59/autonet_arduino
 ### Hardware
  - Ardunio Mega 2560 (more pins) or Arduino M0 (faster) or both)))
  - Raspberry pi 3b or 3b+
