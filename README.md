@@ -16,8 +16,8 @@
 
 ```
 ## Topics
-emergency_main type:Bool - аварийная остановка \
-grab/cmd       type:String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
+emergency_main:Bool - аварийная остановка \
+grab/cmd:String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
 ## FILES
 #### TODO
 ### Arduino
