@@ -15,7 +15,7 @@
 
 ```
 ## subscribers
-* grab/cmd type:String
+* grab/cmd type:String тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
 * arduino/analogin_1 type:Int16
 * arduino/analogin_2 type:Int16
 ## publishers
