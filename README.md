@@ -15,9 +15,10 @@
      \/__/         \/__/                       \/__/         \/__/         \/__/        liom  2020
 
 ```
-### Topics
-emergency_main Bool - аварийная остановка
-### FILES
+## Topics
+emergency_main:Bool - аварийная остановка
+grab/cmd type:String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
+## FILES
 #### TODO
 ### Arduino
 https://github.com/vas59/autonet_arduino
