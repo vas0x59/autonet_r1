@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+# license removed for brevity
+import rospy
+from std_msgs.msg import Int16
+from std_msgs.msg import String
+
+def main():
+   def take(station_up):
+      pub1.publish(60)
+   def throw(station_down):
+      pub1.publish(180)
+   def callback(data):
+      rospy.loginfo(rospy.get_caller_id(), data.data)
+    pub1 = rospy.Publisher('arduino/servo1', Int16,queue_size=10)
+    pub2 = rospy.Publisher('arduino/servo2', Int16,queue_size=10)
+    rospy.Subscriber("grab/cmd", String, callback)
+    rospy.spin()
+    rospy.init_node('graber', anonymous=True)
+    while not rospy.is_shutdown():
+        sub_msg = data.data
+        if (sub_msg == "take"):
+          take(station_up)
+        else if (sub_msg == "throw"):
+          throw(station_down)
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass
