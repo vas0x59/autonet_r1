@@ -15,7 +15,7 @@
 
 ```
 ## subscribers
-* grab/cmd type:String тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
+* grab/cmd           type:String тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
 * arduino/analogin_1 type:Int16 0 если кномка наверху нажата, 1023 если отпущена
 * arduino/analogin_2 type:Int16 0 если кномка снизу нажата, 1023 если отпущена
 ## publishers
