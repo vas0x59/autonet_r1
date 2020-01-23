@@ -56,7 +56,7 @@ coordinates = {
     "cross2_3": (4.6, 0.55),
     "cross2_4": (4.6, 1.1),
     "cross2_5": (4.3, 1.44),
-    "cross2_6": (3.78, 1.44),
+    "cross2_6": (3.74, 1.44),
     "corner1_s_1": (1.85, 1.1), 
     "corner1_s_2": (1.36, 1.65), 
     "corner1_b_2": (1.5, 0.55),
@@ -94,7 +94,10 @@ for type, coord in coordinates.items():
     for i in l:
         iix = (coordinates[i[0]][0])*pole.shape[1]/8
         iiy = pole.shape[0] - (coordinates[i[0]][1])*pole.shape[1]/8
-        cv2.arrowedLine(pole, (int(ix), int(iy)), (int(iix), int(iiy)), (0, 150, 255), thickness=2)
+        if "cross" in type and "cross" in i[0] or "round" in type and "round" in i[0]:
+            cv2.arrowedLine(pole, (int(ix), int(iy)), (int(iix), int(iiy)), (0, 255, 150), thickness=2)
+        else:
+            cv2.arrowedLine(pole, (int(ix), int(iy)), (int(iix), int(iiy)), (0, 150, 255), thickness=2)
 
 
 # plt.show()
