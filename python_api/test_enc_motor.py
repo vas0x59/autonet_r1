@@ -5,8 +5,8 @@ import math
 
 
 print("OK")
-m1 = Motor(1)
-m2 = Motor(2)   
+m1 = Motor(n=1)
+m2 = Motor(n=2)   
 rospy.init_node('tester_m', anonymous=True)
 print("OK")
 # c = 360
@@ -23,7 +23,7 @@ def conv(c):
 m1.set_power(10)
 s = m1.enc
 # rospy.sleep(2)
-while m1.enc < s + 1426*7:
+while m1.enc < s + (2*math.pi/1426)*7:
     rospy.sleep(0.01)
     m1.set_power(10)
 m1.set_power(0)
