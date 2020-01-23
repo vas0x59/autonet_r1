@@ -15,6 +15,10 @@
      \|__|         \/__/         \/__/         ~~       
      
 ```
+### Topics
+ *  /lane/e1 type:std_msgs/Float32 - значение e1
+ *  /lane/e2 type:std_msgs/Float32 - значение e2
+ 
 forked from https://github.com/vas59/cv_hack_final (Vasily)
 
 by Vasily
