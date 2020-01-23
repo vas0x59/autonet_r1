@@ -1,4 +1,4 @@
-# Motors API for python
+# Motors API for ROS
 
 ```
 

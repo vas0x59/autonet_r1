@@ -2,6 +2,7 @@ from Motor import Motor
 from nav_msgs.msg import Odometry
 from Odometry_calc import OdometryCalc
 import json
+from PID import PID
 config = json.load(open("config.json"))
 
 robot_W = config["W"]
@@ -14,6 +15,7 @@ odometry = rospy.Publisher('odometry', Odometry, queue_size=10)
 rospy.init_node('motor_ros', anonymous=True)
 
 odometry_c = OdometryCalc(w=robot_W)
+# odometry_c.calc()
 
 
 
