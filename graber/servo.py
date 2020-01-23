@@ -38,11 +38,11 @@ def main():
         pub2.publish(90)
         pub1.publish(180)
 
-    pub1 = rospy.Publisher("arduino/servo1", Int16, queue_size=10)
-    pub2 = rospy.Publisher("arduino/servo2", Int16, queue_size=10)
-    rospy.Subscriber("grab/cmd", String, callback)
-    rospy.Subscriber("arduino/analogin_1", Int16, callback1)
-    rospy.Subscriber("arduino/analogin_2", Int16, callback2)
+    pub1 = rospy.Publisher("/arduino/servo1", Int16, queue_size=10)
+    pub2 = rospy.Publisher("/arduino/servo2", Int16, queue_size=10)
+    rospy.Subscriber("/grab/cmd", String, callback)
+    rospy.Subscriber("/arduino/analogin_1", Int16, callback1)
+    rospy.Subscriber("/arduino/analogin_2", Int16, callback2)
     rospy.spin()
     rospy.init_node("graber", anonymous=True)
     while not rospy.is_shutdown():
