@@ -18,6 +18,7 @@
 ### Topics
  *  /lane/e1 type:std_msgs/Float32 - значение e1
  *  /lane/e2 type:std_msgs/Float32 - значение e2
+ *  /lane/cross type:std_masgs/Int16 - полоса прекрестка (0 - нет, 1 - black, ...)
  
 forked from https://github.com/vas59/cv_hack_final (Vasily)
 
