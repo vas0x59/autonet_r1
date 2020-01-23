@@ -104,5 +104,5 @@ for type, coord in coordinates.items():
 # plt.savefig('graph.png')
 cv2.imshow("pole", pole)
 cv2.waitKey(0)
-# with open("map_coordinates_1.json", "w") as write_f:
-#     json.dump(coordinates, write_f)
+with open("map_coordinates_1.json", "w") as write_f:
+    json.dump(coordinates, write_f)
