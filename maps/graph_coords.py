@@ -7,6 +7,9 @@ random.seed(22)
 
 pole = cv2.imread("pole.jpg")
 pole = cv2.resize(pole, (0, 0), fx=0.15, fy=0.15)
+
+d = json.load(open("map_1.json"))
+print(d)
 coordinates = {
     "r1": (2.82, 0.55),
     "r2": (2.82, 1.1),
@@ -54,10 +57,15 @@ coordinates = {
     "cross2_4": (4.6, 1.1),
     "cross2_5": (4.3, 1.44),
     "cross2_6": (3.78, 1.44),
-    "corner1_s_1": (1.85, 1.1),
+    "corner1_s_1": (1.85, 1.1), 
+    "corner1_s_2": (1.36, 1.65), 
     "corner1_b_2": (1.5, 0.55),
+    "corner1_b_1": (0.8, 1.3),
+
     "corner2_s_2": (6.15, 1.1),
-    "corner2_b_1": (6.5, 0.55)
+    "corner2_b_1": (6.5, 0.55),
+    "corner2_s_1": (6.7, 1.65),
+    "corner2_b_2": (7.22, 1.3)
 }
 
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -65,6 +73,7 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 fontScale = 0.5
 fontColor = (0, 0, 255)
 lineType = 2
+
 
 
 for type, coord in coordinates.items():
@@ -81,6 +90,11 @@ for type, coord in coordinates.items():
                 fontScale,
                 fontColor,
                 lineType)
+    l = list(d[type])
+    for i in l:
+        iix = (coordinates[i[0]][0])*pole.shape[1]/8
+        iiy = pole.shape[0] - (coordinates[i[0]][1])*pole.shape[1]/8
+        cv2.arrowedLine(pole, (int(ix), int(iy)), (int(iix), int(iiy)), (0, 150, 255), thickness=2)
 
 
 # plt.show()
