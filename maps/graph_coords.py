@@ -1,6 +1,12 @@
 import json
 import matplotlib.pyplot as plt
+import cv2
+import random
+random.seed(22)
 
+
+pole = cv2.imread("pole.jpg")
+pole = cv2.resize(pole, (0, 0), fx=0.15, fy=0.15)
 coordinates = {
     "r1": (2.82, 0.55),
     "r2": (2.82, 1.1),
@@ -22,47 +28,64 @@ coordinates = {
     "b2": (7.22, 1.86),
     "b3": (6.7, 2.77),
     "b4": (7.22, 2.77),
-    "grab1": (2.5, 4),
-    "grab2": (5.45, 4),
-    "grab3": (2.5, 4.46),
-    "grab4": (5.45, 4.46),
+    "grab1": (2.5, 3.95),
+    "grab2": (5.45, 3.95),
+    "grab3": (2.5, 4.5),
+    "grab4": (5.45, 4.5),
     "s1": (0.28, 4.41),
     "s2": (7.72, 2.77),
-    "round1_1": (0.83, 3.58),
+    "round1_1": (0.8, 3.5),
     "round1_2": (1.38, 3.5),
-    "round1_3": (2.1, 4),
-    "round1_4": (2.1, 4.46),
-    "round2_1": (7.22, 3.44),
-    "round2_2": (6.7, 3.44),
-    "round2_3": (5.78, 4),
-    "round2_4": (5.78, 4.46),
-    "cross1_1": (3.4, 4.46),
-    "cross1_2": (3.4, 4),
-    "cross1_3": (3.78, 3.54),
+    "round1_3": (2.1, 3.95),
+    "round1_4": (2.1, 4.5),
+    "round2_1": (7.22, 3.5),
+    "round2_2": (6.7, 3.5),
+    "round2_3": (5.92, 3.95),
+    "round2_4": (5.92, 4.5),
+    "cross1_1": (3.4, 4.5),
+    "cross1_2": (3.4, 3.95),
+    "cross1_3": (3.74, 3.54),
     "cross1_4": (4.3, 3.54),
-    "cross1_5": (4.6, 4),
-    "cross1_6": (4.6, 4.46),
+    "cross1_5": (4.6, 3.95),
+    "cross1_6": (4.6, 4.5),
     "cross2_1": (3.4, 1.1),
     "cross2_2": (3.4, 0.55),
     "cross2_3": (4.6, 0.55),
     "cross2_4": (4.6, 1.1),
     "cross2_5": (4.3, 1.44),
     "cross2_6": (3.78, 1.44),
-    "corner1_1": (1.44, 1.05),
-    "corner1_2": (0.97, 0.5),
-    "corner2_1": (6.56, 1.05),
-    "corner2_2": (7.03, 0.5)
-    }
+    "corner1_s_1": (1.85, 1.1),
+    "corner1_b_2": (1.5, 0.55),
+    "corner2_s_2": (6.15, 1.1),
+    "corner2_b_1": (6.5, 0.55)
+}
 
+font = cv2.FONT_HERSHEY_SIMPLEX
+# bottomLeftCornerOfText = (10,500)
+fontScale = 0.5
+fontColor = (0, 0, 255)
+lineType = 2
 
 
 for type, coord in coordinates.items():
     x = coord[0]
     y = coord[1]
     plt.scatter(x, y)
-    plt.text(x + 0.3, y + 0.3, type, fontsize = 9)
-#plt.show()
-plt.savefig('graph.png')
+    plt.text(x - 0.1, y + 0.1, type, fontsize=7, )
+    ix = (x)*pole.shape[1]/8
+    iy = pole.shape[0] - (y)*pole.shape[1]/8
+    pole = cv2.circle(pole, (int(ix), int(iy)), 5, (0, 255, 0), thickness=-1)
+    cv2.putText(pole, type,
+                (int(ix), int(iy-5-random.random()*15)),
+                font,
+                fontScale,
+                fontColor,
+                lineType)
 
-with open("map_coordinates_1.json", "w") as write_f:
-    json.dump(coordinates, write_f)
+
+# plt.show()
+# plt.savefig('graph.png')
+cv2.imshow("pole", pole)
+cv2.waitKey(0)
+# with open("map_coordinates_1.json", "w") as write_f:
+#     json.dump(coordinates, write_f)
