@@ -18,15 +18,15 @@
 
 ## Topics
 ### OUT
-/odom type:nav_msgs/Odometry - одометрия
-/encoder1 type:std_msgs/Float32 - положение в m
-/encoder2 type:std_msgs/Float32 - положение в m
-/encoder1_v type:std_msgs/Float32 - скорость в m/s
-/encoder2_v type:std_msgs/Float32 - скорость в m/s
+ * /odom type:nav_msgs/Odometry - одометрия
+ * /encoder1 type:std_msgs/Float32 - положение в m
+ * /encoder2 type:std_msgs/Float32 - положение в m
+ * /encoder1_v type:std_msgs/Float32 - скорость в m/s
+ * /encoder2_v type:std_msgs/Float32 - скорость в m/s
 
 ### IN
-/motor1 type:std_msgs/Float32 - скорость в m/s
-/motor2 type:std_msgs/Float32 - скорость в m/s
+ * /motor1 type:std_msgs/Float32 - скорость в m/s
+ * /motor2 type:std_msgs/Float32 - скорость в m/s
 
 ## Files
 Motor.py - работа с моторами 

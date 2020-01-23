@@ -17,7 +17,7 @@
 ```
 ## Topics
 /emergency_main type:std_msgs/Bool - аварийная остановка \
-/grab/cmd type:std_msgs/String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
+/grab/cmd type:std_msgs/String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки. \
 /odom type:nav_msgs/Odometry - одометрия
 ## FILES
 #### TODO
