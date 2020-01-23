@@ -1,8 +1,12 @@
 import rospy
+import tf
+
+
+from nav_msgs.msg import Odometry
+from std_msgs.msg import Float32, Float32
+from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 
 from Motor import Motor
-from nav_msgs.msg import Odometry
-from std_msgs.msg import Float32
 from Odometry_calc import OdometryCalc
 import json
 from PID import PID
@@ -22,6 +26,8 @@ m1_pid = PID(kp, ki, kd)
 m2_pid = PID(kp, ki, kd)
 
 odometry = rospy.Publisher('/odometry', Odometry, queue_size=10)
+encoder1 = rospy.Publisher('/encoder1', Float32, queue_size=10)
+encoder2 = rospy.Publisher('/encoder2', Float32, queue_size=10)
 
 
 odometry_c = OdometryCalc(w=robot_W)
@@ -43,8 +49,8 @@ def m2tv_clb(data):
     m2_target_v = data.data
 
 
-rospy.Subscriber("/m1_v", Float32, m1tv_clb)
-rospy.Subscriber("/m2_v", Float32, m1tv_clb)
+rospy.Subscriber("/motor1", Float32, m1tv_clb)
+rospy.Subscriber("/motor2", Float32, m1tv_clb)
 
 rospy.init_node('motor_ros', anonymous=True)
 
@@ -54,10 +60,15 @@ def control_motors():
     m1.set_power(m1_pid.calc(m1_target_v - m1.get_v_ms()))
     m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()))
 
-# def 
+def calc_odometry():
+    encoder1.publish(m1.get_m())
+    encoder2.publish(m2.get_m())
+    x, y, o = odometry_c.calc(m1.get_m(), m2.get_m())
+
 
 def do():
     control_motors()
+
     # pass
 
 
