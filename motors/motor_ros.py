@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import rospy
 import tf
 
@@ -56,6 +57,7 @@ def m2tv_clb(data):
 
 rospy.Subscriber("/motor1", Float32, m1tv_clb)
 rospy.Subscriber("/motor2", Float32, m1tv_clb)
+# rospy.Subscriber("/navigate", Pose, m1tv_clb)
 
 rospy.init_node('motor_ros', anonymous=True)
 
