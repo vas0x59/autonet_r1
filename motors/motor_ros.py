@@ -3,7 +3,7 @@ import tf
 
 
 from nav_msgs.msg import Odometry
-from std_msgs.msg import Float32, Float32
+from std_msgs.msg import Float32
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 
 from Motor import Motor
@@ -30,6 +30,9 @@ odom_broadcaster = tf.TransformBroadcaster()
 
 encoder1 = rospy.Publisher('/encoder1', Float32, queue_size=10)
 encoder2 = rospy.Publisher('/encoder2', Float32, queue_size=10)
+
+encoder1_v = rospy.Publisher('/encoder1_v', Float32, queue_size=10)
+encoder2_v = rospy.Publisher('/encoder2_v', Float32, queue_size=10)
 
 
 odometry_c = OdometryCalc(w=robot_W)
@@ -67,10 +70,12 @@ last_time = rospy.Time.now()
 
 
 def calc_odometry():
-    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time
+    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v
 
     encoder1.publish(m1.get_m())
     encoder2.publish(m2.get_m())
+    encoder1_v.publish(m1.get_v_ms())
+    encoder2_v.publish(m2.get_v_ms())
 
     current_time = rospy.Time.now()
     x, y, th, vx, vy, vth = odometry_c.calc(current_time - last_time,
