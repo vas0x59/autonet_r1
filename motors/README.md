@@ -29,11 +29,11 @@
  * /motor2 type:std_msgs/Float32 - скорость в m/s
 
 ## Files
-Motor.py - работа с моторами 
-Odometry_calc.py - мат. модель робота
-PID.py - PID
+Motor.py - работа с моторами \
+Odometry_calc.py - мат. модель робота \
+PID.py - PID \
 motor_ros.py - нода для высокоуровневой работы с моторами
-
-
+\
+\
 
 by Vasily
