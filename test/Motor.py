@@ -14,7 +14,7 @@ class Motor:
         if self.n == 2:
             self.enc = -data.data
         else:
-            self.enc = data.data
+            self.enc = -data.data
     def set_power(self, m):
         if self.n == 1:
             self.pub.publish(-m)

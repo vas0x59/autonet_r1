@@ -20,11 +20,11 @@ p1 = 3
 def conv(c):
     return (c*p1) 
 
-m2.set_power(10)
-s = m2.enc
+m1.set_power(10)
+s = m1.enc
 # rospy.sleep(2)
-while m2.enc < s + 1427*7:
+while m1.enc < s + 1426*7:
     rospy.sleep(0.01)
-    m2.set_power(10)
-m2.set_power(0)
+    m1.set_power(10)
+m1.set_power(0)
 
