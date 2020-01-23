@@ -35,6 +35,7 @@ PID.py - PID \
 motor_ros.py - нода для высокоуровневой работы с моторами
 
 ## Config
+config.json
 ```cpp
 {
     "W": 0.2,             // ширина робота
