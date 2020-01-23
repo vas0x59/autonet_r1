@@ -25,7 +25,9 @@ m2 = Motor(n=2, d=wheel_d)
 m1_pid = PID(kp, ki, kd)
 m2_pid = PID(kp, ki, kd)
 
-odometry = rospy.Publisher('/odometry', Odometry, queue_size=10)
+odom_pub = rospy.Publisher('odom', Odometry, queue_size=50)
+odom_broadcaster = tf.TransformBroadcaster()
+
 encoder1 = rospy.Publisher('/encoder1', Float32, queue_size=10)
 encoder2 = rospy.Publisher('/encoder2', Float32, queue_size=10)
 
@@ -60,15 +62,47 @@ def control_motors():
     m1.set_power(m1_pid.calc(m1_target_v - m1.get_v_ms()))
     m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()))
 
+
+last_time = rospy.Time.now()
+
+
 def calc_odometry():
+    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time
+
     encoder1.publish(m1.get_m())
     encoder2.publish(m2.get_m())
-    x, y, o = odometry_c.calc(m1.get_m(), m2.get_m())
+
+    current_time = rospy.Time.now()
+    x, y, th, vx, vy, vth = odometry_c.calc(current_time - last_time,
+                                            m1.get_m(), m2.get_m())
+    odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
+    odom_broadcaster.sendTransform(
+        (x, y, 0.),
+        odom_quat,
+        current_time,
+        "base_link",
+        "odom"
+    )
+
+    odom = Odometry()
+    odom.header.stamp = current_time
+    odom.header.frame_id = "odom"
+
+    # set the position
+    odom.pose.pose = Pose(Point(x, y, 0.), Quaternion(*odom_quat))
+
+    # set the velocity
+    odom.child_frame_id = "base_link"
+    odom.twist.twist = Twist(Vector3(vx, vy, 0), Vector3(0, 0, vth))
+
+    # publish the message
+    odom_pub.publish(odom)
+    last_time = current_time
 
 
 def do():
     control_motors()
-
+    calc_odometry()
     # pass
 
 
