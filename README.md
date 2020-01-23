@@ -42,7 +42,8 @@ https://github.com/vas59/autonet_arduino
  - debug tool
  - rviz?
  - urdf?
-
+### Const
+1426 - 1 оборот 
 ### Code style
 #### PYTHON 3!!!!!!! LINUX!!!!!!!
  - все радикальные изменения делаем в отдельной ветке !!!
