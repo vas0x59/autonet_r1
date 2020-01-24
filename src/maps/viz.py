@@ -73,4 +73,5 @@ while cv2.waitKey(1) != ord("q"):
         break
     path, d = g.find_path(p1, p2)
     viz_path(path, pole_d)
+    print(path)
     cv2.imshow("pole", pole_d)
