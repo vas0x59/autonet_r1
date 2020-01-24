@@ -11,8 +11,10 @@ from Motor import Motor
 from Odometry_calc import OdometryCalc
 import json
 from PID import PID
-config = json.load(open("config.json"))
 
+config_path = rospy.get_param("~config")
+config = json.load(open(config_path))
+print(config)
 robot_W = config["robot_W"]
 wheel_d = config["wheel_d"]
 update_rate = config["update_rate"]
@@ -60,7 +62,7 @@ rospy.Subscriber("/motor2", Float32, m1tv_clb)
 # rospy.Subscriber("/navigate", Pose, m1tv_clb)
 
 rospy.init_node('motor_ros', anonymous=True)
-
+# tf2.
 
 def control_motors():
     global m1_target_v, m2_target_v, m1, m2, m1_pid, m2_pid
@@ -80,7 +82,7 @@ def calc_odometry():
     encoder2_v.publish(m2.get_v_ms())
 
     current_time = rospy.Time.now()
-    x, y, th, vx, vy, vth = odometry_c.calc(current_time - last_time,
+    x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs,
                                             m1.get_m(), m2.get_m())
     odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
     odom_broadcaster.sendTransform(
