@@ -74,6 +74,7 @@ last_time = rospy.Time.now()
 prev_m1_m = 0
 prev_m2_m = 0
 
+
 def calc_odometry():
     global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m
 
@@ -85,7 +86,7 @@ def calc_odometry():
     cm2 = m2.get_m()
     current_time = rospy.Time.now()
     x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs/1000/1000/1000,
-                                             cm1 - prev_m1_m,  cm2 - prev_m2_m)
+                                            cm1 - prev_m1_m,  cm2 - prev_m2_m)
     prev_m1_m = cm1
     prev_m2_m = cm2
     print(x, y, (current_time - last_time).nsecs)
@@ -117,6 +118,7 @@ def calc_odometry():
 def do():
     control_motors()
     calc_odometry()
+
     # pass
 rospy.sleep(1)
 # odometry_c.set()
