@@ -8,7 +8,7 @@ bridge = CvBridge()
 
 
 def img_clb(data):
-    global bridge
+    # global bridge
     cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
     cv2.imshow("Image window", cv_image)
     cv2.waitKey(3)
