@@ -19,8 +19,8 @@
  * /emergency_main type:std_msgs/Bool - аварийная остановка
  * /grab/cmd type:std_msgs/String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
  * /odom type:nav_msgs/Odometry - одометрия 
- * /usb_cam1/image_raw type:sensor_msgs/Image - камера 1 
- * /usb_cam2/image_raw type:sensor_msgs/Image - камера 2
+ * /cam1/image_raw type:sensor_msgs/Image - камера 1 
+ * /cam2/image_raw type:sensor_msgs/Image - камера 2
 ## FILES
 #### TODO
 ### Arduino
