@@ -32,9 +32,9 @@ class Motor:
 
     def set_power(self, m):
         if self.n == 1:
-            self.pub.publish(-m)
+            self.pub.publish(int(-m))
         else:
-            self.pub.publish(m)
+            self.pub.publish(int(m))
 
     def get_rad(self):
         return (2*math.pi/self.encoder_const)*self.enc

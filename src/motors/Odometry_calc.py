@@ -39,3 +39,7 @@ class OdometryCalc:
         self.vy = (self.y-self.py)/dt
         self.vo = (self.o-self.po)/dt
         return self.x, self.y, self.o, self.vx, self.vy, self.vo
+    def set(self, x, y, o):
+        self.x = x
+        self.y = y
+        self.o = o

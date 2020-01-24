@@ -11,7 +11,7 @@ from Motor import Motor
 from Odometry_calc import OdometryCalc
 import json
 from PID import PID
-
+rospy.init_node('motor_ros', anonymous=True)
 config_path = rospy.get_param("~config")
 config = json.load(open(config_path))
 print(config)
@@ -61,7 +61,7 @@ rospy.Subscriber("/motor1", Float32, m1tv_clb)
 rospy.Subscriber("/motor2", Float32, m1tv_clb)
 # rospy.Subscriber("/navigate", Pose, m1tv_clb)
 
-rospy.init_node('motor_ros', anonymous=True)
+
 # tf2.
 
 def control_motors():
@@ -71,19 +71,24 @@ def control_motors():
 
 
 last_time = rospy.Time.now()
-
+prev_m1_m = 0
+prev_m2_m = 0
 
 def calc_odometry():
-    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v
+    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m
 
     encoder1.publish(m1.get_m())
     encoder2.publish(m2.get_m())
     encoder1_v.publish(m1.get_v_ms())
     encoder2_v.publish(m2.get_v_ms())
-
+    cm1 = m1.get_m()
+    cm2 = m2.get_m()
     current_time = rospy.Time.now()
-    x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs,
-                                            m1.get_m(), m2.get_m())
+    x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs/1000/1000/1000,
+                                             cm1 - prev_m1_m,  cm2 - prev_m2_m)
+    prev_m1_m = cm1
+    prev_m2_m = cm2
+    print(x, y, (current_time - last_time).nsecs)
     odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
     odom_broadcaster.sendTransform(
         (x, y, 0.),
@@ -113,8 +118,8 @@ def do():
     control_motors()
     calc_odometry()
     # pass
-
-
+rospy.sleep(1)
+# odometry_c.set()
 r = rospy.Rate(update_rate)  # 10hz
 while not rospy.is_shutdown():
     do()
