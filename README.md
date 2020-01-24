@@ -21,8 +21,9 @@
  * /odom type:nav_msgs/Odometry - одометрия 
  * /cam1/image_raw type:sensor_msgs/Image - камера 1 
  * /cam2/image_raw type:sensor_msgs/Image - камера 2
-## FILES
-#### TODO
+## Launch
+ * motors.launch - запуск системы управления моторами
+ * arduino.launch - запуск работы с arduino 
 ### Arduino
 https://github.com/vas59/autonet_arduino
 ### Hardware
@@ -47,6 +48,8 @@ https://github.com/vas59/autonet_arduino
  - urdf?
 ### Const
 1426 - 1 оборот 
+## FILES
+#### TODO
 ### Code style
 #### PYTHON 3!!!!!!! LINUX!!!!!!!
  - все радикальные изменения делаем в отдельной ветке !!!
