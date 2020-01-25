@@ -46,9 +46,14 @@ def main():
                 pub3.publish(60)
             if (event.code == b) and (event.state == 1):
                 pub3.publish(180)
+            # if (event.code == y) and (event.state == 1):
+            #     pub4.publish(180)
+            # elif (event.code == x) and (event.state == 1):
+            #     pub4.publish(0)
+            # else:
+            #     pub4.publish(90)
             if (event.code == x):
                 exit()
-
             # r.sleep()
             # rospy.sleep(0.01)
 
