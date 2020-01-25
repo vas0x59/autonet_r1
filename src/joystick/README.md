@@ -13,9 +13,14 @@
                 
 ```
 ## joystick.py
+* for use joystick we need use (pip3 install inputs)
 * подключение джостика к ПК и инфа о положении кнопок
+* left joy - ABS_X,ABS_Y
+* right joy - ABS_RX,ABS_RY
+* A - BTN_SOUTH, B - BTN_EAST, X - BTN_NORTH,Y - BTN_WEST
+
 ## Remote_Control.py
 * связь между джостиком и топиками ROS
-* топики: 
+* топики: /motor1, /motor2, /arduino/servo1, /arduino/servo2
 _________________________________________
 by Viktor
