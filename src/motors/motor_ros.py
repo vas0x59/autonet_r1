@@ -6,7 +6,7 @@ import tf
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32, Int16
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
-
+import math
 from Motor import Motor
 from Odometry_calc import OdometryCalc
 import json
@@ -69,16 +69,18 @@ def control_motors():
     global m1_target_v, m2_target_v, m1, m2, m1_pid, m2_pid
     # print("motor_target", m1_target_v - m1.get_v_ms(), m2_target_v - m2.get_v_ms())
     m1.set_power(m1_pid.calc(m1_target_v - m1.get_v_ms()) + m1_target_v*40)
-    m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()) + m2_target_v*40  )
+    m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()) + m2_target_v*40)
 
 
 last_time = rospy.Time.now()
 prev_m1_m = 0
 prev_m2_m = 0
+i = 0
+first_t = True
 
 
 def calc_odometry():
-    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m, first_enc_m1, first_enc_m2
+    global first_t, encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m, first_enc_m1, first_enc_m2, i
     if first_enc_m1 is None:
         first_enc_m1 = m1.get_m()
         first_enc_m2 = m2.get_m()
@@ -86,37 +88,43 @@ def calc_odometry():
     encoder2.publish(m2.get_m()-first_enc_m2)
     encoder1_v.publish(m1.get_v_ms())
     encoder2_v.publish(m2.get_v_ms())
-    cm1 = m1.get_m()
-    cm2 = m2.get_m()
-    current_time = rospy.Time.now()
-    x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs/1000/1000/1000,
-                                            cm1 - prev_m1_m,  cm2 - prev_m2_m)
-    prev_m1_m = cm1
-    prev_m2_m = cm2
-    # print(x, y, (current_time - last_time).nsecs/1000/1000/1000)
-    odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
-    odom_broadcaster.sendTransform(
-        (x, y, 0.),
-        odom_quat,
-        current_time,
-        "base_link",
-        "odom"
-    )
+    if  not first_t:
+        i = 0
+        cm1 = m1.get_m()-first_enc_m1
+        cm2 = m2.get_m()-first_enc_m2
+        current_time = rospy.Time.now()
+        x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs/1000/1000/1000,
+                                                cm1-prev_m1_m,  cm2-prev_m2_m)
+        print(round(cm1 - prev_m1_m, 3), round(cm2 - prev_m2_m, 3),
+              "xy", round(x, 3), round(y, 3), "th", th)
+        prev_m1_m = cm1
+        prev_m2_m = cm2
 
-    odom = Odometry()
-    odom.header.stamp = current_time
-    odom.header.frame_id = "odom"
+        odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
+        odom_broadcaster.sendTransform(
+            (x, y, 0.),
+            odom_quat,
+            current_time,
+            "base_link",
+            "odom"
+        )
 
-    # set the position
-    odom.pose.pose = Pose(Point(x, y, 0.), Quaternion(*odom_quat))
+        odom = Odometry()
+        odom.header.stamp = current_time
+        odom.header.frame_id = "odom"
 
-    # set the velocity
-    odom.child_frame_id = "base_link"
-    odom.twist.twist = Twist(Vector3(vx, vy, 0), Vector3(0, 0, vth))
+        # set the position
+        odom.pose.pose = Pose(Point(x, y, 0.), Quaternion(*odom_quat))
 
-    # publish the message
-    odom_pub.publish(odom)
-    last_time = current_time
+        # set the velocity
+        odom.child_frame_id = "base_link"
+        odom.twist.twist = Twist(Vector3(vx, vy, 0), Vector3(0, 0, vth))
+
+        # publish the message
+        odom_pub.publish(odom)
+        last_time = current_time
+    i += 1
+    first_t = False
 
 
 def do():
