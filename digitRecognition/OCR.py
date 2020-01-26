@@ -5,7 +5,6 @@ import numpy as np
 class recog:
     def __init__(self, cam):
         self.cap = cv2.VideoCapture(cam)
-        self.text = ""
     def get(self):
         ret, img = self.cap.read()
         img = cv2.bitwise_not(img)
