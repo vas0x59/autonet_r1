@@ -7,7 +7,6 @@ cap = cv2.VideoCapture(0)
 
 while True:
     ret, img = cap.read()
-    img = np.flip(img, axis=1)
     text = pytesseract.image_to_string(img)
     cv2.imshow("image", img)
     print(text)
