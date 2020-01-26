@@ -1,27 +1,13 @@
-#import urllib.request
 import pytesseract
 import cv2
 import numpy as np
 
-#url='http://192.168.0.102:8080/shot.jpg'
-cap = cv2.VideoCapture(0)
-
-while True:
-    ret, img = cap.read()
-    #GETTING IMG FROM IPCAM
-    #img = urllib.request.urlopen(url)
-    #img = np.array(bytearray(img.read()),dtype=np.uint8)
-    #img = cv2.imdecode(img,-1)
-    #create negative
-    #img = cv2.bitwise_not(img)
-    #create gray
-    #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    img = cv2.bitwise_not(img)
-    text = pytesseract.image_to_string(img, config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
-    cv2.imshow("image", img)
-    print(text)
-    if cv2.waitKey(10) == 27:
-        break
-cap.release()
-cv2.destroyAllWindows()
-
+class recog:
+    def __init__(self, cam):
+        self.cap = cv2.VideoCapture(cam)
+        self.text = ""
+    def get(self):
+        ret, img = self.cap.read()
+        img = cv2.bitwise_not(img)
+        text = pytesseract.image_to_string(img, config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
+        return text
