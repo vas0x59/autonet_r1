@@ -61,7 +61,7 @@ nav_sub = rospy.Subscriber("/nav", Pose, nav_clb)
 
 
 def handle_forward(req: Forward):
-    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id
+    global mode, target_dist, target_yaw, target_speed, time_r, target_stopper, target_id, start_x, start_y, r_y, r_x
     time_r = rospy.Time.now().to_sec()
     target_dist = req.dist
     target_yaw = req.yaw
@@ -70,6 +70,8 @@ def handle_forward(req: Forward):
     target_speed = req.speed
     nav_state = "start"
     target_id = req.id
+    start_x = r_x
+    start_y = r_y
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
     # return NavigateResponse(0)
 
@@ -87,13 +89,12 @@ while not rospy.is_shutdown():
         nav_state = "rotate"
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
         v = motors_config["robot_W"] * config["yaw_speed"]
-        mv1 = v * (((yaw_to_point - r_yaw) > 0)*2-1)
-        mv2 = -v * (((yaw_to_point - r_yaw) > 0)*2-1)
+        mv1 = v * (((target_yaw - r_yaw) > 0)*2-1)
+        mv2 = -v * (((target_yaw - r_yaw) > 0)*2-1)
         m1.publish(float(mv1))
         m2.publish(float(mv2))
-        if (abs(yaw_to_point - r_yaw) < config["yaw_th"]):
+        if (abs(target_yaw - r_yaw) < config["yaw_th"]):
             if mode != "yaw":
                 nav_state = "going"
                 m1.publish(float(0))
@@ -105,11 +106,10 @@ while not rospy.is_shutdown():
                     m2.publish(float(0))
                 nav_state = "done"
     if nav_state == "going":
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
-        pid_r = yaw_pid.calc(yaw_to_point - r_yaw) * target_speed
+        pid_r = yaw_pid.calc(target_yaw - r_yaw) * target_speed
         m1.publish(float(target_speed - pid_r))
         m2.publish(float(target_speed + pid_r))
-        if get_dist(r_x, r_y, target_x, target_y) < config["dist_th"]:
+        if abs(get_dist(r_x, r_y, start_x, start_y) - target_dist) < config["dist_th"]:
             if target_stopper == True:
                 m1.publish(float(0))
                 m2.publish(float(0))
