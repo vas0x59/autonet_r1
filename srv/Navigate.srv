@@ -3,5 +3,6 @@ float32 y
 float32 yaw
 float32 speed
 int8 mode
+bool stopper
 ---
 int8 res
