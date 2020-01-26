@@ -54,3 +54,6 @@ class OdometryCalc:
         self.x = x
         self.y = y
         self.o = o
+        self.px = x
+        self.py = y
+        self.po = o

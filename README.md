@@ -24,6 +24,8 @@
 ## Launch
  * motors.launch - запуск системы управления моторами
  * arduino.launch - запуск работы с arduino 
+ * nav.launch - система навигации 
+ * joy.launch
 ### Arduino
 https://github.com/vas59/autonet_arduino
 ### Hardware

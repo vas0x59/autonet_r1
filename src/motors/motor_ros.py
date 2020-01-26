@@ -4,13 +4,18 @@ import tf
 
 
 from nav_msgs.msg import Odometry
-from std_msgs.msg import Float32, Int16
+from std_msgs.msg import Float32, Int16, Bool
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
+from autonet_r1.srv import SetOdom
+
 import math
+
 from Motor import Motor
 from Odometry_calc import OdometryCalc
 import json
 from PID import PID
+
+
 rospy.init_node('motor_ros', anonymous=True)
 config_path = rospy.get_param("~config")
 config = json.load(open(config_path))
@@ -57,9 +62,14 @@ def m2tv_clb(data):
     global m2_target_v
     m2_target_v = data.data
 
+def set_odom(data):
+    global odometry_c
+    odometry_c.set(data.x, data.y, data.yaw)
 
 rospy.Subscriber("/motor1", Float32, m1tv_clb)
 rospy.Subscriber("/motor2", Float32, m2tv_clb)
+set_odom_srv = rospy.Service('set_odometry', SetOdom, set_odom)
+# rospy.Subscriber("/set_odom", Bool, set_odom())
 # rospy.Subscriber("/navigate", Pose, m1tv_clb)
 
 
@@ -95,8 +105,8 @@ def calc_odometry():
         current_time = rospy.Time.now()
         x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs/1000/1000/1000,
                                                 cm1-prev_m1_m,  cm2-prev_m2_m)
-        print(round(cm1 - prev_m1_m, 3), round(cm2 - prev_m2_m, 3),
-              "xy", round(x, 3), round(y, 3), "th", th)
+        # print(round(cm1 - prev_m1_m, 3), round(cm2 - prev_m2_m, 3),
+            #   "xy", round(x, 3), round(y, 3), "th", th)
         prev_m1_m = cm1
         prev_m2_m = cm2
 

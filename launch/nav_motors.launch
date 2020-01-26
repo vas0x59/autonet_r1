@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find autonet_r1)/launch/motors.launch" />
+    <include file="$(find autonet_r1)/launch/nav.launch" />
+    
+</launch>
