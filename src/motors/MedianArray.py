@@ -1,5 +1,5 @@
 class MedianArray:
-    def __init__(self, window=5, d_val=0):
+    def __init__(self, window=4, d_val=0):
         self.arr = [d_val for i in range(window)]
         self.window = window
         self.val = d_val
