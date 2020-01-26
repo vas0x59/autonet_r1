@@ -4,5 +4,6 @@ float32 yaw
 float32 speed
 int8 mode
 bool stopper
+string id
 ---
 int8 res

@@ -27,4 +27,4 @@
  * 1 - set ALL
  * 2 - set only YAW
 
-by Vasily, Dmitrii
+by Vasily
