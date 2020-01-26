@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="rosserial_arduino" type="serial_node.py" name="rosserial_arduino" output="log" respawn="false">
+    <node pkg="rosserial_arduino" type="serial_node.py" name="rosserial_arduino" output="screen" respawn="false">
         <param name="port" value="/dev/ttyACM0"/>
         <param name="baud" value="115200"/>
     </node>
