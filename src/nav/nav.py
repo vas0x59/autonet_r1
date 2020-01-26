@@ -13,7 +13,7 @@ Modes:  1 - ALL
         2 - Zero
 """
 
-rospy.init_node('nav', anonymous=True)
+rospy.init_node('nav')
 config_path = rospy.get_param("~config", "nav_config.json")
 config = json.load(open(config_path))
 print(config)

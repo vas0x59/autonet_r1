@@ -1,4 +1,5 @@
 {
+    "update_rate": 20,
     "yaw_pid": {
         "p": 0,
         "i": 0,

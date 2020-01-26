@@ -16,7 +16,7 @@ from autonet_r1.src.motors import PID
 """
 """
 
-rospy.init_node('navigate', anonymous=True)
+rospy.init_node('navigate')
 config_path = rospy.get_param("~config", "navigate_config.json")
 config = json.load(open(config_path))
 print(config)
@@ -59,5 +59,11 @@ def handle_navigate(req: Navigate):
     return NavigateResponse(0)
 
 
-rospy.init_node('add_two_ints_server')
+
 s = rospy.Service('navigate', Navigate, handle_navigate)
+
+
+r = rospy.Rate(config["update_rate"])  # 10hz
+while not rospy.is_shutdown():
+    # calc()
+    r.sleep()
