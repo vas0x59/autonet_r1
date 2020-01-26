@@ -42,7 +42,7 @@ def odom_clb(data: Odometry):
     odom_x = data.pose.pose.position.x
     odom_y = data.pose.pose.position.y
     odom_yaw = tf.transformations.euler_from_quaternion(
-        data.pose.pose.orientation.w, )[2]
+        data.pose.pose.orientation.w, data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z)[2]
 
 
 odom_sub = rospy.Subscriber("/odom", Odometry, odom_clb)
@@ -71,7 +71,7 @@ def calc():
     res_y = (odom_y*config["odom_xy_w"]) / (config["odom_xy_w"]) - zero_y
     res_yaw = (odom_yaw*config["odom_yaw_w"] + navx_yaw*config["navx_yaw_w"]
                ) / (config["odom_yaw_w"] + config["odom_navx_w"]) - zero_yaw
-    
+
     current_time = rospy.Time.now()
     quat = tf.transformations.quaternion_from_euler(0, 0, res_yaw)
     nav_broadcaster.sendTransform(
@@ -84,11 +84,11 @@ def calc():
     pose = PoseStamped()
     pose.header.stamp = current_time
     pose.header.frame_id = "nav"
-    
+
     # set the position
     pose.pose = Pose(Point(res_x, res_y, 0.), Quaternion(*quat))
     nav_pub.publish(pose)
-    
+
     # set the velocity
     # pose.child_frame_id = "base_link"
 
