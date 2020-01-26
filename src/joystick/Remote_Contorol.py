@@ -41,6 +41,7 @@ def main():
                 pub1.publish(ur1)
             if (event.code == rj) and ((-32000 < event.state < -0.05/32000) or (0.05/32000 < event.state < 32000)):
                 ur2 = event.state / -32000 * config["speed"]
+                print(ur2)
                 pub2.publish(ur2)
             if (event.code == a) and (event.state == 1):
                 pub3.publish(60)

@@ -4,7 +4,7 @@ import tf
 
 
 from nav_msgs.msg import Odometry
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Int16
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 
 from Motor import Motor
@@ -36,7 +36,8 @@ encoder2 = rospy.Publisher('/encoder2', Float32, queue_size=10)
 
 encoder1_v = rospy.Publisher('/encoder1_v', Float32, queue_size=10)
 encoder2_v = rospy.Publisher('/encoder2_v', Float32, queue_size=10)
-
+first_enc_m1 = None
+first_enc_m2 = 0
 
 odometry_c = OdometryCalc(w=robot_W)
 
@@ -58,7 +59,7 @@ def m2tv_clb(data):
 
 
 rospy.Subscriber("/motor1", Float32, m1tv_clb)
-rospy.Subscriber("/motor2", Float32, m1tv_clb)
+rospy.Subscriber("/motor2", Float32, m2tv_clb)
 # rospy.Subscriber("/navigate", Pose, m1tv_clb)
 
 
@@ -66,8 +67,9 @@ rospy.Subscriber("/motor2", Float32, m1tv_clb)
 
 def control_motors():
     global m1_target_v, m2_target_v, m1, m2, m1_pid, m2_pid
-    m1.set_power(m1_pid.calc(m1_target_v - m1.get_v_ms()))
-    m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()))
+    # print("motor_target", m1_target_v - m1.get_v_ms(), m2_target_v - m2.get_v_ms())
+    m1.set_power(m1_pid.calc(m1_target_v - m1.get_v_ms()) + m1_target_v*40)
+    m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()) + m2_target_v*40  )
 
 
 last_time = rospy.Time.now()
@@ -76,10 +78,12 @@ prev_m2_m = 0
 
 
 def calc_odometry():
-    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m
-
-    encoder1.publish(m1.get_m())
-    encoder2.publish(m2.get_m())
+    global encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m, first_enc_m1, first_enc_m2
+    if first_enc_m1 is None:
+        first_enc_m1 = m1.get_m()
+        first_enc_m2 = m2.get_m()
+    encoder1.publish(m1.get_m()-first_enc_m1)
+    encoder2.publish(m2.get_m()-first_enc_m2)
     encoder1_v.publish(m1.get_v_ms())
     encoder2_v.publish(m2.get_v_ms())
     cm1 = m1.get_m()
@@ -89,7 +93,7 @@ def calc_odometry():
                                             cm1 - prev_m1_m,  cm2 - prev_m2_m)
     prev_m1_m = cm1
     prev_m2_m = cm2
-    print(x, y, (current_time - last_time).nsecs)
+    # print(x, y, (current_time - last_time).nsecs/1000/1000/1000)
     odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
     odom_broadcaster.sendTransform(
         (x, y, 0.),
