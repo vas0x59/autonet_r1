@@ -70,7 +70,7 @@ def handle_navigate(req: Navigate):
     nav_state = "start"
     target_id = req.id
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
-    return NavigateResponse(0)
+    # return NavigateResponse(0)
 
 
 s = rospy.Service('navigate', Navigate, handle_navigate)
