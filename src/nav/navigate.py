@@ -119,6 +119,7 @@ while not rospy.is_shutdown():
         m2.publish(float(target_speed + pid_r))
         print(get_dist(r_x, r_y, target_x, target_y), float(config["dist_th"]))
         if get_dist(r_x, r_y, target_x, target_y) < float(config["dist_th"]):
+            print("TRUE")
             if target_stopper == True:
                 m1.publish(float(0))
                 m2.publish(float(0))
