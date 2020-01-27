@@ -120,12 +120,14 @@ while not rospy.is_shutdown():
         print(get_dist(r_x, r_y, target_x, target_y), float(config["dist_th"]))
         if get_dist(r_x, r_y, target_x, target_y) < float(config["dist_th"]):
             print("TRUE")
+            nav_state == "done"
+            print(nav_state)
             if target_stopper == True:
                 m1.publish(float(0))
                 m2.publish(float(0))
-            nav_state == "done"
-    if nav_state == "done":
-        nav_state = "wait"
+            
+    # if nav_state == "done":
+    #     nav_state = "wait"
     # m1.publish(float(0))
     # m2.publish(float(0))
 
