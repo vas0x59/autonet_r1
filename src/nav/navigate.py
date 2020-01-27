@@ -88,7 +88,7 @@ while not rospy.is_shutdown():
     print(nav_state, mode)
     if nav_state == "start":
         nav_state = "rotate"
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+        yaw_to_point = math.atan2(target_x-r_x, target_y-r_y)
         start_yaw = r_yaw
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
