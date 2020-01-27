@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+import sys
+sys.path.append('../../../autonet_r1')
 
 import rospy
 import tf
@@ -11,9 +12,10 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped
 from std_msgs.msg import Float32
 
-from autonet_r1.srv import Forward
+from autonet_r1.srv import Forward, ForwardResponse
+# from autonet_r1.src
 from autonet_r1.src.motors.PID import PID
-
+print("OKOKOK")
 """
 """
 
@@ -49,19 +51,19 @@ r_y = 0
 r_yaw = 0
 
 
-def nav_clb(data: Pose):
+def nav_clb(data: PoseStamped):
     global r_x, r_y, r_yaw
-    r_x = data.position.x
-    r_y = data.position.y
-    r_yaw = tf.transformations.euler_from_quaternion(
-        data.pose.pose.orientation.w, data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z)[2]
+    r_x = data.pose.position.x
+    r_y = data.pose.position.y
+    r_yaw = tf.transformations.euler_from_quaternion([
+        data.pose.orientation.x, data.pose.orientation.y, data.pose.orientation.z, data.pose.orientation.w])[2]
 
 
-nav_sub = rospy.Subscriber("/nav", Pose, nav_clb)
+nav_sub = rospy.Subscriber("/nav", PoseStamped, nav_clb)
 
 
 def handle_forward(req: Forward):
-    global mode, target_dist, target_yaw, target_speed, time_r, target_stopper, target_id, start_x, start_y, r_y, r_x
+    global mode, target_dist, target_yaw, target_speed, time_r, target_stopper, target_id, start_x, start_y, r_y, r_x, nav_state
     time_r = rospy.Time.now().to_sec()
     target_dist = req.dist
     target_yaw = req.yaw
@@ -72,8 +74,10 @@ def handle_forward(req: Forward):
     target_id = req.id
     start_x = r_x
     start_y = r_y
+    print(r_x, r_y)
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
     # return NavigateResponse(0)
+    return ForwardResponse()
 
 
 s = rospy.Service('forward', Forward, handle_forward)

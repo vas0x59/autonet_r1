@@ -33,7 +33,7 @@ zero_x = 0
 zero_y = 0
 zero_yaw = 0
 
-nav_pub = rospy.Publisher('nav', Pose, queue_size=50)
+nav_pub = rospy.Publisher('nav', PoseStamped, queue_size=50)
 nav_broadcaster = tf.TransformBroadcaster()
 
 
@@ -41,8 +41,8 @@ def odom_clb(data: Odometry):
     global odom_x, odom_y, odom_yaw
     odom_x = data.pose.pose.position.x
     odom_y = data.pose.pose.position.y
-    odom_yaw = tf.transformations.euler_from_quaternion(
-        data.pose.pose.orientation.w, data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z)[2]
+    odom_yaw = tf.transformations.euler_from_quaternion([
+        data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w])[2]
 
 
 odom_sub = rospy.Subscriber("/odom", Odometry, odom_clb)
@@ -70,7 +70,7 @@ def calc():
     res_x = (odom_x*config["odom_xy_w"]) / (config["odom_xy_w"]) - zero_x
     res_y = (odom_y*config["odom_xy_w"]) / (config["odom_xy_w"]) - zero_y
     res_yaw = (odom_yaw*config["odom_yaw_w"] + navx_yaw*config["navx_yaw_w"]
-               ) / (config["odom_yaw_w"] + config["odom_navx_w"]) - zero_yaw
+               ) / (config["odom_yaw_w"] + config["navx_yaw_w"]) - zero_yaw
 
     current_time = rospy.Time.now()
     quat = tf.transformations.quaternion_from_euler(0, 0, res_yaw)

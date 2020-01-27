@@ -106,6 +106,7 @@ def calc_odometry():
         current_time = rospy.Time.now()
         x, y, th, vx, vy, vth = odometry_c.calc((current_time - last_time).nsecs/1000/1000/1000,
                                                 cm1-prev_m1_m,  cm2-prev_m2_m)
+        # x = -x
         # print(round(cm1 - prev_m1_m, 3), round(cm2 - prev_m2_m, 3),
             #   "xy", round(x, 3), round(y, 3), "th", th)
         prev_m1_m = cm1

@@ -8,11 +8,11 @@
     </node>
     <node pkg="autonet_r1" type="navigate.py" name="navigate" output="screen" clear_params="true">
         <param name="config" value="$(find autonet_r1)/src/nav/navigate_config.json"/>
-        <param name="config" value="$(find autonet_r1)/src/motors/config.json"/>
+        <param name="motors_config" value="$(find autonet_r1)/src/motors/config.json"/>
     </node>
     <node pkg="autonet_r1" type="forward.py" name="forward" output="screen" clear_params="true">
         <param name="config" value="$(find autonet_r1)/src/nav/navigate_config.json"/>
-        <param name="config" value="$(find autonet_r1)/src/motors/config.json"/>
+        <param name="motors_config" value="$(find autonet_r1)/src/motors/config.json"/>
     </node>
 
 </launch>

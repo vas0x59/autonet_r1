@@ -3,4 +3,5 @@ float32 yaw
 string id
 string mode
 float32 speed
+bool stopper
 ---

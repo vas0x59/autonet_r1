@@ -9,11 +9,12 @@ project(autonet_r1)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   nav_msgs
-  roscpp
+  # roscpp
   rospy
   sensor_msgs
   std_msgs
   tf
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -23,7 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-catkin_python_setup()
+# catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -73,6 +74,7 @@ add_service_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
+generate_messages()
 # generate_messages(
 #   DEPENDENCIES
 #   nav_msgs#   sensor_msgs#   std_msgs
@@ -112,6 +114,7 @@ catkin_package(
 #  LIBRARIES autonet_r1
 #  CATKIN_DEPENDS cv_birdge nav_msgs roscpp rospy sensor_msgs std_msgs tf
 #  DEPENDS system_lib
+CATKIN_DEPENDS message_runtime
 )
 
 ###########
@@ -209,4 +212,14 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+file(GLOB python_scripts_DIR
+    "src/*.py"
+)
+
+install(DIRECTORY launch
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+ 
+catkin_install_python(PROGRAMS ${python_scripts_DIR}
+                      DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 catkin_package()

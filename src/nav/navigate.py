@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-
-
+# import sys
+# # sys.path.append('../../../autonet_r1')
+# print(sys.path)
 import rospy
 import tf
 import math
@@ -47,19 +48,20 @@ r_y = 0
 r_yaw = 0
 
 
-def nav_clb(data: Pose):
+def nav_clb(data: PoseStamped):
     global r_x, r_y, r_yaw
-    r_x = data.position.x
-    r_y = data.position.y
-    r_yaw = tf.transformations.euler_from_quaternion(
-        data.pose.pose.orientation.w, data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z)[2]
+    # data.pose.position
+    r_x = data.pose.position.x
+    r_y = data.pose.position.y
+    r_yaw = tf.transformations.euler_from_quaternion([
+        data.pose.orientation.x, data.pose.orientation.y, data.pose.orientation.z, data.pose.orientation.w])[2]
 
 
-nav_sub = rospy.Subscriber("/nav", Pose, nav_clb)
+nav_sub = rospy.Subscriber("/nav", PoseStamped, nav_clb)
 
-
+start_yaw = 0
 def handle_navigate(req: Navigate):
-    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id
+    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id, nav_state
     time_r = rospy.Time.now().to_sec()
     target_x = req.x
     target_y = req.y
@@ -70,7 +72,7 @@ def handle_navigate(req: Navigate):
     nav_state = "start"
     target_id = req.id
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
-    # return NavigateResponse(0)
+    return NavigateResponse()
 
 
 s = rospy.Service('navigate', Navigate, handle_navigate)
@@ -81,18 +83,25 @@ r = rospy.Rate(config["update_rate"])  # 10hz
 yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]
               ["i"], config["yaw_pid"]["d"])
 while not rospy.is_shutdown():
+    # global nav_state
     # calc()
+    print(nav_state, mode)
     if nav_state == "start":
         nav_state = "rotate"
+        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+        start_yaw = r_yaw
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+        
+        print("yaw_to_point", yaw_to_point)
         v = motors_config["robot_W"] * config["yaw_speed"]
-        mv1 = v * (((yaw_to_point - r_yaw) > 0)*2-1)
-        mv2 = -v * (((yaw_to_point - r_yaw) > 0)*2-1)
+        mv1 = v * (((yaw_to_point - start_yaw) > 0)*2-1)
+        mv2 = -v * (((yaw_to_point - start_yaw) > 0)*2-1)
         m1.publish(float(mv1))
         m2.publish(float(mv2))
+        print("Yaw", r_yaw)
         if (abs(yaw_to_point - r_yaw) < config["yaw_th"]):
+            print("OK")
             if mode != "yaw":
                 nav_state = "going"
                 m1.publish(float(0))
@@ -104,10 +113,11 @@ while not rospy.is_shutdown():
                     m2.publish(float(0))
                 nav_state = "done"
     if nav_state == "going":
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+        # yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
         pid_r = yaw_pid.calc(yaw_to_point - r_yaw) * target_speed
         m1.publish(float(target_speed - pid_r))
         m2.publish(float(target_speed + pid_r))
+        print(get_dist(r_x, r_y, target_x, target_y))
         if get_dist(r_x, r_y, target_x, target_y) < config["dist_th"]:
             if target_stopper == True:
                 m1.publish(float(0))
