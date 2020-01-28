@@ -8,6 +8,7 @@ import tf
 
 from autonet_r1.srv import GetPath, GetPathResponse, GetGrabPath, GetGrabPathResponse
 
+rospy.init_node("get_path")
 map_path = rospy.get_param("~map", "../maps/map_1.json")
 map_c_path = rospy.get_param("~map_coordinates", "../maps/map_coordinates_1.json")
 print(map_path, map_c_path)
