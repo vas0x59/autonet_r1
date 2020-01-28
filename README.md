@@ -64,7 +64,7 @@ https://github.com/vas59/autonet_arduino
  - реализовывать код в виде мат моделей узлов (манипулятор и колесная база)(все параметры в конфиги))))
 
 ### Архитектура 
-#### TODO
+![GitHub Logo](/readme_data/autonet_soft-Navigation system.png)
 
 \
 \
