@@ -61,6 +61,7 @@ add_message_files(
 add_service_files(
   FILES
   GetPath.srv
+  GetGrabPath.srv
   Navigate.srv
   SetNav.srv
   SetOdom.srv
