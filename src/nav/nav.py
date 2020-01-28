@@ -5,7 +5,7 @@ import tf2_ros
 
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped, TransformStamped
-from autonet_r1.srv import SetOdom, SetNav
+from autonet_r1.srv import SetOdom, SetNav, SetNavResponse, GetTelemetry, GetTelemetryResponse
 import math
 import json
 from autonet_r1.src.tools.tf_tools import *
@@ -37,7 +37,8 @@ zero_yaw = 0
 
 nav_pub = rospy.Publisher('nav', PoseStamped, queue_size=50)
 nav_broadcaster = tf2_ros.TransformBroadcaster()
-
+tf_buffer = tf2_ros.Buffer()
+tf_listener = tf2_ros.TransformListener(tf_buffer)
 
 def odom_clb(data: Odometry):
     global odom_x, odom_y, odom_yaw
@@ -62,9 +63,19 @@ def set_nav(data):
         zero_x = data.x
         zero_y = data.y
         zero_yaw = data.yaw
+    return SetNavResponse()
 
-
+def get_tem(data):
+    global res_x, res_y, res_yaw, tf_buffer
+    res = GetTelemetryResponse()
+    # res.x =
+    x, y, z = transform_xy_yaw(res_x, res_y, res_yaw, "nav", data.frame) 
+    res.x = x
+    res.y = y
+    res.yaw = yaw
+    return res
 s = rospy.Service('set_nav', SetNav, set_nav)
+gs = rospy.Service('get_telemetry', GetTelemetry, get_tem)
 
 
 def calc():

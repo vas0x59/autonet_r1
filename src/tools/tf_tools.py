@@ -8,6 +8,19 @@ from std_msgs.msg import Float32, Int16, Bool
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped
 import tf.transformations as t
 
+def transform_xy_yaw(x, y, yaw, framefrom, frameto, tf_buffer):
+    p = PoseStamped()
+    p.header.frame_id = framefrom
+    p.pose.position.x = x
+    p.pose.position.y = y
+    p.pose.orientation = orientation_from_euler(0, 0, yaw)
+    # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
+    pose_local = tf_buffer.transform(framefrom, frameto, TRANSFORM_TIMEOUT)
+    target_x = pose_local.pose.position.x
+    target_y = pose_local.pose.position.y
+    target_yaw = euler_from_orientation(pose_local.orientation)[2]
+    return target_x, target_y, target_yaw
+
 def get_transform(msg):
     # br = tf2_ros.TransformBroadcaster()
     ts = TransformStamped()

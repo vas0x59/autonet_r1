@@ -67,6 +67,7 @@ add_service_files(
   SetNav.srv
   SetOdom.srv
   Forward.srv
+  GetTelemetry.srv
 )
 
 ## Generate actions in the 'action' folder

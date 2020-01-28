@@ -12,6 +12,13 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped
 from std_msgs.msg import Float32
 
-from autonet_r1.srv import Navigate
+from autonet_r1.srv import Navigate, GetPath, SetNav
+from autonet_r1.src.tools.tf_tools import *
+
+p1 = input("start")
+p2 = input("p2")
+
+
+
 
 
