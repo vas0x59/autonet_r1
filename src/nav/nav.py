@@ -51,7 +51,7 @@ set_odom = rospy.ServiceProxy('set_odom', SetOdom)
 
 def set_nav(data):
     global zero_x, zero_y, zero_yaw, res_x, res_y, res_yaw
-    if data.mode == 1:
+    if data.mode == "all":
         set_odom(x=data.x, y=data.y, yaw=data.yaw)
         res_x = data.x
         res_y = data.y
@@ -81,6 +81,13 @@ def calc():
         "base_link",
         "nav"
     )
+    # nav_broadcaster.sendTransform(
+    #     (0, 0, 0.),
+    #     (0, 0, 0, 0),
+    #     current_time,
+    #     "odom",
+    #     "nav"
+    # )
     pose = PoseStamped()
     pose.header.stamp = current_time
     pose.header.frame_id = "nav"
