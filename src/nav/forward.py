@@ -3,7 +3,9 @@
 # sys.path.append('../../../autonet_r1')
 
 import rospy
-import tf_conversions
+import tf2_ros
+import tf
+
 import math
 import numpy as np
 import json
@@ -51,11 +53,14 @@ r_y = 0
 r_yaw = 0
 
 
+tf_buffer = tf2_ros.Buffer()
+tf_listener = tf2_ros.TransformListener(tf_buffer)
+
 def nav_clb(data: PoseStamped):
     global r_x, r_y, r_yaw
     r_x = data.pose.position.x
     r_y = data.pose.position.y
-    r_yaw = tf_conversions.transformations.euler_from_quaternion([
+    r_yaw = tf.transformations.euler_from_quaternion([
         data.pose.orientation.x, data.pose.orientation.y, data.pose.orientation.z, data.pose.orientation.w])[2]
 
 

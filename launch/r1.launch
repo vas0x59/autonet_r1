@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find autonet_r1)/launch/arduino.launch" />
+    <include file="$(find autonet_r1)/launch/nav_motors.launch" />
+    <include file="$(find autonet_r1)/launch/camera1.launch" />
+    
+</launch>

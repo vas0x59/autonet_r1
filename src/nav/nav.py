@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
+import tf
 import tf2_ros
-import tf_conversions
 
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped
@@ -42,7 +42,7 @@ def odom_clb(data: Odometry):
     global odom_x, odom_y, odom_yaw
     odom_x = data.pose.pose.position.x
     odom_y = data.pose.pose.position.y
-    odom_yaw = tf_conversions.transformations.euler_from_quaternion([
+    odom_yaw = tf.transformations.euler_from_quaternion([
         data.pose.pose.orientation.x, data.pose.pose.orientation.y, data.pose.pose.orientation.z, data.pose.pose.orientation.w])[2]
 
 
@@ -74,7 +74,7 @@ def calc():
                ) / (config["odom_yaw_w"] + config["navx_yaw_w"]) - zero_yaw
 
     current_time = rospy.Time.now()
-    quat = tf_conversions.transformations.quaternion_from_euler(0, 0, res_yaw)
+    quat = tf.transformations.quaternion_from_euler(0, 0, res_yaw)
     nav_broadcaster.sendTransform(
         (res_x, res_y, 0.),
         quat,
