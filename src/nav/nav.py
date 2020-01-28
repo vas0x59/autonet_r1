@@ -4,10 +4,11 @@ import tf
 import tf2_ros
 
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped
+from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped, TransformStamped
 from autonet_r1.srv import SetOdom, SetNav
 import math
 import json
+from autonet_r1.src.tools.tf_tools import *
 
 """
 Modes:  1 - ALL
@@ -75,12 +76,12 @@ def calc():
 
     current_time = rospy.Time.now()
     quat = tf.transformations.quaternion_from_euler(0, 0, res_yaw)
-    nav_broadcaster.sendTransform(
+    nav_broadcaster.sendTransform(get_transform((
         (res_x, res_y, 0.),
         quat,
         current_time,
         "base_link",
-        "nav"
+        "nav"))
     )
     # nav_broadcaster.sendTransform(
     #     (0, 0, 0.),

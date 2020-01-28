@@ -6,9 +6,9 @@ import tf2_ros
 
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32, Int16, Bool
-from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
+from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped
 from autonet_r1.srv import SetOdom
-
+from autonet_r1.src.tools.tf_tools import *
 import math
 
 from Motor import Motor
@@ -63,9 +63,11 @@ def m2tv_clb(data):
     global m2_target_v
     m2_target_v = data.data
 
+
 def set_odom(data):
     global odometry_c
     odometry_c.set(data.x, data.y, data.yaw)
+
 
 rospy.Subscriber("/motor1", Float32, m1tv_clb)
 rospy.Subscriber("/motor2", Float32, m2tv_clb)
@@ -91,6 +93,7 @@ i = 0
 first_t = True
 
 
+
 def calc_odometry():
     global first_t, encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m, first_enc_m1, first_enc_m2, i
     if first_enc_m1 is None:
@@ -100,7 +103,7 @@ def calc_odometry():
     encoder2.publish(m2.get_m()-first_enc_m2)
     encoder1_v.publish(m1.get_v_ms())
     encoder2_v.publish(m2.get_v_ms())
-    if  not first_t:
+    if not first_t:
         i = 0
         cm1 = m1.get_m()-first_enc_m1
         cm2 = m2.get_m()-first_enc_m2
@@ -109,17 +112,18 @@ def calc_odometry():
                                                 cm1-prev_m1_m,  cm2-prev_m2_m)
         # x = -x
         # print(round(cm1 - prev_m1_m, 3), round(cm2 - prev_m2_m, 3),
-            #   "xy", round(x, 3), round(y, 3), "th", th)
+        #   "xy", round(x, 3), round(y, 3), "th", th)
         prev_m1_m = cm1
         prev_m2_m = cm2
 
         odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
-        odom_broadcaster.sendTransform(
+        # odom_broadcaster.sendTransform()
+        odom_broadcaster.sendTransform(get_transform((
             (x, y, 0.),
             odom_quat,
             current_time,
             "base_link",
-            "odom"
+            "odom"))
         )
 
         odom = Odometry()
