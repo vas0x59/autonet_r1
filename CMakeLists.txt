@@ -55,6 +55,7 @@ add_message_files(
   FILES
   PathNamed2.msg
   PathNamed3.msg
+  LaneRes.msg
 )
 
 ## Generate services in the 'srv' folder
