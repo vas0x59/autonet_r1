@@ -15,7 +15,9 @@ from std_msgs.msg import Float32
 
 from autonet_r1.srv import Navigate, NavigateResponse
 from autonet_r1.src.motors.PID import PID
-
+from autonet_r1.src.tools.tf_tools import *
+TRANSFORM_TIMEOUT = 1
+LOCAL_FRAME = "nav"
 """
 """
 
@@ -39,6 +41,7 @@ target_yaw = 0
 # target_yaw_speed = 0
 target_speed = 0
 target_id = 0
+target_frame = "map"
 # setpoint_yaw = 0
 nav_state = "wait"
 
@@ -52,7 +55,7 @@ r_yaw = 0
 tf_buffer = tf2_ros.Buffer()
 tf_listener = tf2_ros.TransformListener(tf_buffer)
 
-
+# tf_buffer.
 def nav_clb(data: PoseStamped):
     global r_x, r_y, r_yaw
     # data.pose.position
@@ -65,18 +68,30 @@ def nav_clb(data: PoseStamped):
 nav_sub = rospy.Subscriber("/nav", PoseStamped, nav_clb)
 
 start_yaw = 0
+
+
 def handle_navigate(req: Navigate):
-    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id, nav_state
+    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id, nav_state, target_frame, tf_buffer
     time_r = rospy.Time.now().to_sec()
-    target_x = req.x
-    target_y = req.y
-    target_yaw = req.yaw
+    # target_x = req.x
+    # target_y = req.y
+    # target_yaw = req.yaw
     mode = req.mode
     target_stopper = req.stopper
     target_speed = req.speed
     nav_state = "start"
     target_id = req.id
+    target_frame = req.frame
+    p = PoseStamped()
+    p.header.frame_id = req.frame
+    p.pose.position.x = req.x
+    p.pose.position.y = req.y
+    p.pose.orientation = orientation_from_euler(0, 0, req.yaw)
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
+    pose_local = tf_buffer.transform(p, LOCAL_FRAME, TRANSFORM_TIMEOUT)
+    target_x = pose_local.pose.position.x
+    target_y = pose_local.pose.position.y
+    target_yaw = euler_from_orientation(pose_local.orientation)[2]
     return NavigateResponse()
 
 
@@ -93,11 +108,11 @@ while not rospy.is_shutdown():
     print(nav_state, mode)
     if nav_state == "start":
         nav_state = "rotate"
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x    )
+        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
         start_yaw = r_yaw
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
-        
+
         print("yaw_to_point", yaw_to_point)
         v = motors_config["robot_W"] * config["yaw_speed"]
         mv1 = v * (((yaw_to_point - start_yaw) > 0)*2-1)
@@ -111,7 +126,8 @@ while not rospy.is_shutdown():
                 nav_state = "going"
                 m1.publish(float(0))
                 m2.publish(float(0))
-                yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
+                yaw_pid = PID(
+                    config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
             else:
                 if target_stopper == True:
                     m1.publish(float(0))
@@ -130,7 +146,7 @@ while not rospy.is_shutdown():
             if target_stopper == True:
                 m1.publish(float(0))
                 m2.publish(float(0))
-            
+
     # if nav_state == "done":
     #     nav_state = "wait"
     # m1.publish(float(0))
