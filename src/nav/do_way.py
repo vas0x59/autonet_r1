@@ -20,7 +20,8 @@ p2 = input("p2")
 
 rospy.init_node("get_path")
 map_path = rospy.get_param("~map", "../maps/map_1.json")
-map_c_path = rospy.get_param("~map_coordinates", "../maps/map_coordinates_1.json")
+map_c_path = rospy.get_param(
+    "~map_coordinates", "../maps/map_coordinates_1.json")
 print(map_path, map_c_path)
 
 map_conn = json.load(open(map_path))
@@ -33,12 +34,14 @@ get_path = rospy.ServiceProxy('get_path', GetPath)
 get_grab_path = rospy.ServiceProxy('get_grab_path', GetGrabPath)
 path_pub = rospy.Publisher('/path', PathNamed3)
 
-path = get_path(start=p1, end=p2)
+path = get_path(start=p1, end=p2).path
 print(path)
 path_pub.publish(PathNamed3(path=path, start=p1, end=p2))
 
-
-
-# get_telemetry()
-
-
+# def navigate_wait(x=0, y=0, yaw=0, frame=0, th=0.02):
+#     # while
+#     pass
+for point_name in path:
+    x, y = tuple(map_coor[point_name])
+    navigate(x=x, y=y, yaw=float('nan'), speed=0.4, frame="map", stopper=False, id="get_path_nav_"+str(round(rospy.Time.now().to_sec(), 1)))
+    

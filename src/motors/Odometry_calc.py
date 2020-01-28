@@ -31,9 +31,9 @@ class OdometryCalc:
         # self.prev_t = time.time()
         self.o = self.o + (self.Dr - self.Dl)/self.w/2
         self.d = (self.Dr + self.Dl) / 4
-        if (self.o > 2.0 * math.pi):
+        if (self.o > 1.0 * math.pi):
             self.o -= 2.0 * math.pi
-        if (self.o < 0.0):
+        if (self.o < -1.0 * math.pi):
             self.o += 2.0 * math.pi
 
         self.x = self.x + self.d*math.cos(self.o)

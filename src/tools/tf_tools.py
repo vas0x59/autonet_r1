@@ -1,12 +1,22 @@
 import rospy
 import tf
 import tf2_ros
-
+import math
 
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32, Int16, Bool
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped
 import tf.transformations as t
+
+
+def offset_yaw(yaw, zer_yaw):
+    itog = yaw
+    itog = yaw - zero_yaw
+    if (itog > 1.0 * math.pi):
+            itog -= 2.0 * math.pi
+    if (itog < -1.0 * math.pi):
+        itog+= 1.0 * math.pi
+    return itog
 
 def transform_xy_yaw(x, y, yaw, framefrom, frameto, tf_buffer):
     p = PoseStamped()

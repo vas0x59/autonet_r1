@@ -15,7 +15,7 @@ from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamp
 from std_msgs.msg import Float32
 
 from autonet_r1.srv import Forward, ForwardResponse
-# from autonet_r1.src
+from autonet_r1.src.tools.tf_tools import *
 from autonet_r1.src.motors.PID import PID
 print("OKOKOK")
 """
@@ -99,11 +99,11 @@ while not rospy.is_shutdown():
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
         v = motors_config["robot_W"] * config["yaw_speed"]
-        mv1 = v * (((target_yaw - r_yaw) > 0)*2-1)
-        mv2 = -v * (((target_yaw - r_yaw) > 0)*2-1)
+        mv1 = v * ((offset_yaw(r_yaw, target_yaw) > 0)*2-1)
+        mv2 = -v * ((offset_yaw(r_yaw, target_yaw) > 0)*2-1)
         m1.publish(float(mv1))
         m2.publish(float(mv2))
-        if (abs(target_yaw - r_yaw) < config["yaw_th"]):
+        if (abs(offset_yaw(r_yaw, target_yaw)) < config["yaw_th"]):
             if mode != "yaw":
                 nav_state = "going"
                 m1.publish(float(0))
@@ -115,7 +115,7 @@ while not rospy.is_shutdown():
                     m2.publish(float(0))
                 nav_state = "done"
     if nav_state == "going":
-        pid_r = yaw_pid.calc(target_yaw - r_yaw) * target_speed
+        pid_r = yaw_pid.calc(offset_yaw(r_yaw, target_yaw)) * target_speed
         m1.publish(float(target_speed - pid_r))
         m2.publish(float(target_speed + pid_r))
         if abs(get_dist(r_x, r_y, start_x, start_y) - target_dist) < config["dist_th"]:
