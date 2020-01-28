@@ -7,6 +7,7 @@ from graph import Graph
 
 import rospy
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped
+from autonet_r1.msg import PathNamed2, PathNamed3
 import tf
 
 
@@ -30,6 +31,13 @@ pole = cv2.resize(pole, (0, 0), fx=0.15, fy=0.15)
 r_x = 0
 r_y = 0
 r_yaw = 0
+path_g = [""]
+
+def path3_clb(data: PathNamed3):
+    global path_g
+    path_g = data.path
+
+
 def nav_clb(data: Pose):
     global r_x, r_y, r_yaw
     r_x = data.position.x
@@ -39,6 +47,7 @@ def nav_clb(data: Pose):
 
 
 nav_sub = rospy.Subscriber("/nav", Pose, nav_clb)
+path_sub = rospy.Subscriber("/path", PathNamed3, path3_clb)
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 # bottomLeftCornerOfText = (10,500)
@@ -72,24 +81,26 @@ for type, coord in coordinates.items():
             cv2.arrowedLine(pole, (int(ix), int(iy)), (int(
                 iix), int(iiy)), (0, 150, 255), thickness=2)
 
-while cv2.waitKey(1) != ord("q"):
-    pole_d = pole.copy()
+def viz_path(path, pole_d):
+    for j in range(len(path) - 1):
+        x = coordinates[path[j]][0]
+        y = coordinates[path[j]][1]
+        ix = (x)*pole.shape[1]/8
+        iy = pole.shape[0] - (y)*pole.shape[1]/8
+        # i = d[path[j+1]]
+        iix = (coordinates[path[j+1]][0])*pole.shape[1]/8
+        iiy = pole.shape[0] - (coordinates[path[j+1]][1])*pole.shape[1]/8
+        cv2.arrowedLine(pole_d, (int(ix), int(iy)), (int(iix),
+                                                   int(iiy)), (255, 0, 0), thickness=2)
 
+while cv2.waitKey(2) != ord("q"):
+    pole_d = pole.copy()
+    viz_path(path_g, pole_d)
     ix = (r_x)*pole.shape[1]/8
     iy = pole.shape[0] - (r_y)*pole.shape[1]/8
     cv2.circle(pole, (int(ix), int(iy)), 5, (255, 0, 255), thickness=-1)
     cv2.imshow("pole", pole_d)
-# def viz_path(path, pole_d):
-#     for j in range(len(path) - 1):
-#         x = coordinates[path[j]][0]
-#         y = coordinates[path[j]][1]
-#         ix = (x)*pole.shape[1]/8
-#         iy = pole.shape[0] - (y)*pole.shape[1]/8
-#         # i = d[path[j+1]]
-#         iix = (coordinates[path[j+1]][0])*pole.shape[1]/8
-#         iiy = pole.shape[0] - (coordinates[path[j+1]][1])*pole.shape[1]/8
-#         cv2.arrowedLine(pole_d, (int(ix), int(iy)), (int(iix),
-#                                                    int(iiy)), (255, 0, 0), thickness=2)
+
 
 
 # # plt.show()
