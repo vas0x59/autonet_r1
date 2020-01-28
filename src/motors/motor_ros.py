@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import rospy
-import tf
+import tf_conversions
+import tf2_ros
 
 
 from nav_msgs.msg import Odometry
@@ -15,7 +16,7 @@ from Odometry_calc import OdometryCalc
 import json
 from PID import PID
 
-
+# tf2_ros.Tr
 rospy.init_node('motor_ros', anonymous=True)
 config_path = rospy.get_param("~config")
 config = json.load(open(config_path))
@@ -34,7 +35,7 @@ m1_pid = PID(kp, ki, kd)
 m2_pid = PID(kp, ki, kd)
 
 odom_pub = rospy.Publisher('odom', Odometry, queue_size=50)
-odom_broadcaster = tf.TransformBroadcaster()
+odom_broadcaster = tf2_ros.TransformBroadcaster()
 
 encoder1 = rospy.Publisher('/encoder1', Float32, queue_size=10)
 encoder2 = rospy.Publisher('/encoder2', Float32, queue_size=10)
@@ -112,7 +113,7 @@ def calc_odometry():
         prev_m1_m = cm1
         prev_m2_m = cm2
 
-        odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
+        odom_quat = tf_conversions.transformations.quaternion_from_euler(0, 0, th)
         odom_broadcaster.sendTransform(
             (x, y, 0.),
             odom_quat,

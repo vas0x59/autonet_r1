@@ -5,4 +5,5 @@ float32 speed
 string mode
 bool stopper
 string id
+string frame
 ---
