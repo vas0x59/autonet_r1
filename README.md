@@ -66,9 +66,7 @@ https://github.com/vas59/autonet_arduino
 ### Архитектура 
 ![GitHub Logo](/readme_data/autonet_soft.png)
 
-\
-\
-\
+---
 by Vasily, Viktor, Dmitrii, Georgy
 ```
     ___       ___       ___       ___   
@@ -78,6 +76,26 @@ by Vasily, Viktor, Dmitrii, Georgy
  \:\  \    \::/\/__/ \:\/:/  / \/_/:/  /
   \:\__\    \:\__\    \::/  /    /:/  / 
    \/__/     \/__/     \/__/     \/__/  
+
+```
+ 
+---
+
+```
+
+
+                                                            ___     
+                                                           /\  \    
+                                                          /::\  \   
+                                                         /:/\:\  \  
+                                                        /::\~\:\  \ 
+                                                       /:/\:\ \:\__\
+                                                       \/__\:\/:/  /
+                                                            \::/  / 
+                                                            /:/  /  
+                                                           /:/  /   
+                                                           \/__/    
+
 
 ```
 

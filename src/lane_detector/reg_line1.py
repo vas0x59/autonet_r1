@@ -238,18 +238,18 @@ class RegLine:
         # crop = warped[warped.shape[0]-200:warped.shape[0], warped.shape[1]//10*5-50:warped.shape[1]//10*5+50].copy()
         # su = np.sum(crop[:, :])
         # print("su", su)
-        su2 = 0
-        ccc = self.img_size[1]//2
-        if (p_s > 0):
-            ccc = (self.points[p_s-1][0]+self.points[qq-1][0])//2
-        ccc = self.img_size[1]//2
-        yyyyy = 70
+        # su2 = 0
+        # ccc = self.img_size[1]//2
+        # if (p_s > 0):
+        #     ccc = (self.points[p_s-1][0]+self.points[qq-1][0])//2
+        # ccc = self.img_size[1]//2
+        # yyyyy = 70
 
-        crop2 = warped[yyyyy:yyyyy+80, int(ccc-40):int(ccc+32)]
-        cv2.circle(out_img, (int(ccc), int((yyyyy + yyyyy + 70)/2)),
-                   2, (0, 255, 255), 3)
-        su2 = np.sum(crop2[:, :])
-        yyyyy = 0
+        # crop2 = warped[yyyyy:yyyyy+80, int(ccc-40):int(ccc+32)]
+        # cv2.circle(out_img, (int(ccc), int((yyyyy + yyyyy + 70)/2)),
+                #    2, (0, 255, 255), 3)
+        # su2 = np.sum(crop2[:, :])
+        # yyyyy = 0
         # crop2 = img_blur[yyyyy:yyyyy+70, int(ccc-80):int(ccc+80)]
         # su2 = np.sum(crop2[:, :])-su1
         # if (ccc-10) > 0 and (ccc+10) < self.img_size[1]:
@@ -257,9 +257,9 @@ class RegLine:
         #     cv2.circle(out_img,(int(ccc),int((yyyyy + yyyyy+ 70)/2)),2,(0,255,255),3)
         #     crop2 = img_blur[yyyyy:yyyyy+70, int(ccc-5):int(ccc+5)]
         #     su2 = np.sum(crop2[:, :])
-        if (err < -80 or err > 80) or (su2 > 75000):  # 1866213
-            err = 0
-            err2 = 0
+        # if (err < -80 or err > 80) or (su2 > 75000):  # 1866213
+        #     err = 0
+        #     err2 = 0
         if show == True:
             cv2.imshow("CenterLine", out_img)
         return err, err2, out_img, su2
