@@ -39,7 +39,7 @@ nav_pub = rospy.Publisher('nav', PoseStamped, queue_size=50)
 nav_broadcaster = tf2_ros.TransformBroadcaster()
 tf_buffer = tf2_ros.Buffer()
 tf_listener = tf2_ros.TransformListener(tf_buffer)
-
+# tf_buffer.transform()
 def odom_clb(data: Odometry):
     global odom_x, odom_y, odom_yaw
     odom_x = data.pose.pose.position.x
@@ -68,6 +68,7 @@ def set_nav(data):
 def get_tem(data):
     global res_x, res_y, res_yaw, tf_buffer
     # res = GetTelemetryResponse()
+    # tf_buffer.transform()
     # res.x =
     x, y, yaw = transform_xy_yaw(res_x, res_y, res_yaw, "nav", data.frame, tf_buffer) 
     # res.x = x
