@@ -6,7 +6,7 @@ import numpy as np
 
 
 class RegLine:
-    def __init__(self, img_size=[200, 360]):
+    def __init__(self, img_size=[300, 460]):
         self.img_size = img_size
         self.points = []
         # self.src = np.float32([[20, 200],
@@ -33,10 +33,22 @@ class RegLine:
         #           [300, 100],
         #           [60, 100]])
 
-        self.src = np.float32([[0, 200],
-                               [360, 200],
-                               [300, 120],
-                               [60, 120]])
+        # self.src = np.float32([[0, 200],
+        #                        [360, 200],
+        #                        [300, 120],
+        #                        [60, 120]])
+
+        # self.src = np.float32([[-90, 280],
+        #                        [550, 280],
+        #                        [400, 220],
+        #                        [60, 220]])
+
+        self.src = np.float32([[-90, 280],
+                               [550, 280],
+                               [400, 200],
+                               [60, 200]])
+
+
 
         # self.src = np.float32([[0, 299],
         #            [399, 299],
@@ -72,8 +84,9 @@ class RegLine:
 
     def wrap(self, img):
         M = cv2.getPerspectiveTransform(self.src, self.dst)
+        average = img[150:350, 100:200].mean(axis=0).mean(axis=0)
         warped = cv2.warpPerspective(
-            img, M, (self.img_size[1], self.img_size[0]), flags=cv2.INTER_LINEAR)
+            img, M, (self.img_size[1], self.img_size[0]), flags=cv2.INTER_LINEAR, borderValue=(average))
         return warped
 
     def reg_line(self, img, show=False):
@@ -112,6 +125,7 @@ class RegLine:
         # _, warped = cv2.threshold(warped, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
         warped[(warped < 100)] = 100
         img_blur = cv2.medianBlur(warped, 5)
+        
         if show == True:
             cv2.imshow("warpedq", img_blur)
         # cv2.imshow("warped1",warped)
@@ -124,8 +138,8 @@ class RegLine:
         # element = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1))
         # kernel = np.ones((10,10),np.uint8)
         warped = cv2.erode(warped, np.ones((1, 1), np.uint8))
-        # warped = cv2.dilate(warped,np.ones((1,1),np.uint8),iterations = 1)
         # warped =
+        # warped = cv2.dilate(warped,np.ones((1,1),np.uint8),iterations = 1)
         # warped = self.thresh(warped)
         # warped = cv2.morphologyEx(warped, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
         warped = cv2.medianBlur(warped, 3)
@@ -262,4 +276,4 @@ class RegLine:
         #     err2 = 0
         if show == True:
             cv2.imshow("CenterLine", out_img)
-        return err, err2, out_img, su2
+        return err, err2, out_img#, su2

@@ -19,18 +19,19 @@ def img_clb(data):
     out_img = cv_image.copy()
     # cv2.imshow("Image window", cv_image)
     # cv2.waitKey(3)
-    e1, e2, out_img, color = rl.reg_line(cv_image)
+    e1, e2, out_img = rl.reg_line(cv_image, show=True)
     lr_msg = LaneRes()
-    lr_msg.color = str(color)
+    # lr_msg.color = str(color)
     lr_msg.e1 = e1
     lr_msg.e2 = e2
     # lr.e1 = 
     res_pub.publish(lr_msg)
     image_pub.publish(bridge.cv2_to_imgmsg(out_img, "bgr8"))
+    cv2.waitKey(1)
 
 
 image_sub = rospy.Subscriber(
-    "/cam1/image_raw", Image, img_clb)
+    "/usb_cam1/image_raw", Image, img_clb)
 
 # ic = image_converter()
 rospy.init_node('image_converter', anonymous=True)
