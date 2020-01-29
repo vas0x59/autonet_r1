@@ -69,7 +69,7 @@ def get_tem(data):
     global res_x, res_y, res_yaw, tf_buffer
     res = GetTelemetryResponse()
     # res.x =
-    x, y, z = transform_xy_yaw(res_x, res_y, res_yaw, "nav", data.frame) 
+    x, y, z = transform_xy_yaw(res_x, res_y, res_yaw, "nav", data.frame, tf_buffer) 
     res.x = x
     res.y = y
     res.yaw = yaw
