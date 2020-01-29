@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="autonet_r1" type="viz_ros.py" name="viz_ros" output="screen" clear_params="true">
+        <param name="map" value="$(find autonet_r1)/src/maps/map_1.json"/>
+        <param name="map_coordinates" value="$(find autonet_r1)/src/maps/map_coordinates_1.json"/>
+        <param name="pole_img" value="$(find autonet_r1)/src/maps/pole.jpg"/>
+    </node>
+
+</launch>

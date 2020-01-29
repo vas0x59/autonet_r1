@@ -1,0 +1,11 @@
+{
+    "update_rate": 20,
+    "yaw_pid": {
+        "p": 1.5,
+        "i": 0.1,
+        "d": 0.0
+    },
+    "yaw_th": 0.1,
+    "yaw_speed": 0.70,
+    "dist_th": 0.05
+}

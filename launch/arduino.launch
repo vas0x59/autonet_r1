@@ -1,5 +1,11 @@
 <launch>
-    <node pkg="rosserial_arduino" type="serial_node.py" name="rosserial_arduino" output="log" respawn="false">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="range_sharp1_frame" args="0 0 0 0 0 0 base_link range_sharp1"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="range_sharp2_frame" args="0 0 0 0 0 0 base_link range_sharp2"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="range_sharp3_frame" args="0 0 0 0 0 0 base_link range_sharp3"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="range_sharp4_frame" args="0 0 0 0 0 0 base_link range_sharp4"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="range_ping1_frame" args="0 0 0 0 0 0 base_link range_ping1"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="range_ping2_frame" args="0 0 0 0 0 0 base_link range_ping2"/>
+    <node pkg="rosserial_arduino" type="serial_node.py" name="rosserial_arduino" output="screen" respawn="false">
         <param name="port" value="/dev/ttyACM0"/>
         <param name="baud" value="115200"/>
     </node>

@@ -1,5 +1,6 @@
 # Joystick
 ```
+
       /\  \     /\  \     |\__\        /\  \     /\  \         ___       /\  \        /\__\    
       \:\  \   /::\  \    |:|  |      /::\  \    \:\  \       /\  \     /::\  \      /:/  /    
   ___ /::\__\ /:/\:\  \   |:|  |     /:/\ \  \    \:\  \      \:\  \   /:/\:\  \    /:/__/     
@@ -18,9 +19,11 @@
 * left joy - ABS_X,ABS_Y
 * right joy - ABS_RX,ABS_RY
 * A - BTN_SOUTH, B - BTN_EAST, X - BTN_NORTH,Y - BTN_WEST
-
+* X - EXIT
 ## Remote_Control.py
 * связь между джостиком и топиками ROS
+* кнопки A и B отвечают за работу захвата
+* правый и левый сосочки отвечают за движение моторов
 * топики: /motor1, /motor2, /arduino/servo1, /arduino/servo2
 _________________________________________
-by Viktor
+by Viktor, Vasily
