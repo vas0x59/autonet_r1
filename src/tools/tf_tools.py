@@ -5,7 +5,7 @@ import math
 
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32, Int16, Bool
-from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped
+from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped, PoseStamped
 import tf.transformations as t
 
 def get_dist(x1, y1, x2, y2):
