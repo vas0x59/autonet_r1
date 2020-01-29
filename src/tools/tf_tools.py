@@ -34,34 +34,38 @@ def offset_yaw(yaw, zer_yaw):
 #     return [point_wrt_target.x, point_wrt_target.y, point_wrt_target.z]
 
 
-def get_transformation(source_frame, target_frame,tf_buffer,
-                       tf_cache_duration=2.0):
-    # tf_buffer = tf2_ros.Buffer(rospy.Duration(tf_cache_duration))
-    # tf2_ros.TransformListener(tf_buffer)
+# def get_transformation(source_frame, target_frame,tf_buffer,
+#                        tf_cache_duration=2.0):
+#     # tf_buffer = tf2_ros.Buffer(rospy.Duration(tf_cache_duration))
+#     # tf2_ros.TransformListener(tf_buffer)
 
-    # get the tf at first available time
-    try:
-        transformation = tf_buffer.lookup_transform(target_frame,
-                source_frame, rospy.Time(0), rospy.Duration(0.1))
-    except (tf2_ros.LookupException, tf2_ros.ConnectivityException,
-            tf2_ros.ExtrapolationException):
-        rospy.logerr('Unable to find the transformation from %s to %s'
-                     % source_frame, target_frame)
-    return transformation
+#     # get the tf at first available time
+#     try:
+#         transformation = tf_buffer.lookup_transform(target_frame,
+#                 source_frame, rospy.Time(0), rospy.Duration(0.1))
+#     except (tf2_ros.LookupException, tf2_ros.ConnectivityException,
+#             tf2_ros.ExtrapolationException):
+#         rospy.logerr('Unable to find the transformation from %s to %s'
+#                      % source_frame, target_frame)
+#     return transformation
 
 
-def transform_xy_yaw(x, y, yaw, framefrom, frameto, tf_buffer):
+def transform_xy_yaw(x, y, yaw, framefrom, frameto, listener):
     p = PoseStamped()
+    # Pose().fr
     p.header.frame_id = framefrom
     p.pose.position.x = x
     p.pose.position.y = y
+    # p.pose.pse
     p.pose.orientation = orientation_from_euler(0, 0, yaw)
+    # p.pose
+    # p.pose.orientation
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
     # pose_local = tf2_geometry_msgs.do_transform_point(p, get_transformation(framefrom, frameto, tf_buffer))
-    pose_local == tf_buffer.transform(p, frameto)
+    pose_local = listener.transformPose(frameto, p)
     target_x = pose_local.pose.position.x
     target_y = pose_local.pose.position.y
-    target_yaw = euler_from_orientation(pose_local.orientation)[2]
+    target_yaw = euler_from_orientation(pose_local.pose.orientation)[2]
     return target_x, target_y, target_yaw
 
 def get_transform(msg):

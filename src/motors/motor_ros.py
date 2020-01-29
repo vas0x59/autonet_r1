@@ -35,7 +35,7 @@ m1_pid = PID(kp, ki, kd)
 m2_pid = PID(kp, ki, kd)
 
 odom_pub = rospy.Publisher('odom', Odometry, queue_size=50)
-odom_broadcaster = tf2_ros.TransformBroadcaster()
+odom_broadcaster = tf.TransformBroadcaster()
 
 encoder1 = rospy.Publisher('/encoder1', Float32, queue_size=10)
 encoder2 = rospy.Publisher('/encoder2', Float32, queue_size=10)
@@ -94,7 +94,6 @@ i = 0
 first_t = True
 
 
-
 def calc_odometry():
     global first_t, encoder1, encoder2, odom_broadcaster, m1, m2, odom_pub, last_time, encoder1_v, encoder2_v, prev_m1_m, prev_m2_m, first_enc_m1, first_enc_m2, i
     if first_enc_m1 is None:
@@ -119,13 +118,12 @@ def calc_odometry():
 
         odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
         # odom_broadcaster.sendTransform()
-        odom_broadcaster.sendTransform(get_transform((
+        odom_broadcaster.sendTransform(
             (x, y, 0.),
             odom_quat,
             current_time,
             "base_link",
-            "odom"))
-        )
+            "odom")
 
         odom = Odometry()
         odom.header.stamp = current_time
@@ -148,6 +146,7 @@ def calc_odometry():
 def do():
     control_motors()
     calc_odometry()
+
 
     # pass
 rospy.sleep(1)
