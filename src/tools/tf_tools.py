@@ -8,6 +8,8 @@ from std_msgs.msg import Float32, Int16, Bool
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped, PoseStamped
 import tf.transformations as t
 
+TRANSFORM_TIMEOUT = 1
+
 def get_dist(x1, y1, x2, y2):
     return ((x1-x2) ** 2 + (y1-y2) ** 2)**0.5
 
