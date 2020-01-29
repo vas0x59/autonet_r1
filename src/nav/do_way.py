@@ -44,4 +44,7 @@ path_pub.publish(PathNamed3(path=path, start=p1, end=p2))
 for point_name in path:
     x, y = tuple(map_coor[point_name])
     navigate(x=x, y=y, yaw=float('nan'), speed=0.4, frame="map", stopper=False, id="get_path_nav_"+str(round(rospy.Time.now().to_sec(), 1)))
-    
+    while True:
+        telem = get_telemetry()
+        if get_dist(x, y, telem.x, telem.y) < 0.05:
+            break

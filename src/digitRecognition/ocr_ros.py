@@ -12,16 +12,16 @@ nr = NumReg()
 
 rospy.init_node('ocr', anonymous=True)
 
-ocr_pub_text = rospy.Publisher('/ocr/text', String, queue_size=10)
-ocr_pub_color = rospy.Publisher('/ocr/color', String, queue_size=10)
+ocr_pub_text = rospy.Publisher('/ocr/addr', String, queue_size=10)
+# ocr_pub_color = rospy.Publisher('/ocr/color', String, queue_size=10)
 
 
 def img_clb(data):
     # global bridge
     cv_image = bridge.imgmsg_to_cv2(data, "bgr8")
     text, color = nr.get(cv_image)
-    ocr_pub_text.publish(text)
-    ocr_pub_color.publish(color)
+    ocr_pub_text.publish(color[0] + test)
+    # ocr_pub_color.publish(color)
 
 
 image_sub = rospy.Subscriber(

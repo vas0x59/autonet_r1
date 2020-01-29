@@ -8,6 +8,8 @@ from std_msgs.msg import Float32, Int16, Bool
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped
 import tf.transformations as t
 
+def get_dist(x1, y1, x2, y2):
+    return ((x1-x2) ** 2 + (y1-y2) ** 2)**0.5
 
 def offset_yaw(yaw, zer_yaw):
     itog = yaw
