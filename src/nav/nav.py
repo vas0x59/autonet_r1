@@ -67,13 +67,13 @@ def set_nav(data):
 
 def get_tem(data):
     global res_x, res_y, res_yaw, tf_buffer
-    res = GetTelemetryResponse()
+    # res = GetTelemetryResponse()
     # res.x =
-    x, y, z = transform_xy_yaw(res_x, res_y, res_yaw, "nav", data.frame, tf_buffer) 
-    res.x = x
-    res.y = y
-    res.yaw = yaw
-    return res
+    x, y, yaw = transform_xy_yaw(res_x, res_y, res_yaw, "nav", data.frame, tf_buffer) 
+    # res.x = x
+    # res.y = y
+    # res.yaw = yaw
+    return {"x":x, "y":y, "yaw":yaw}
 s = rospy.Service('set_nav', SetNav, set_nav)
 gs = rospy.Service('get_telemetry', GetTelemetry, get_tem)
 
