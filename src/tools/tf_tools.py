@@ -29,7 +29,7 @@ def transform_xy_yaw(x, y, yaw, framefrom, frameto, tf_buffer):
     p.pose.position.y = y
     p.pose.orientation = orientation_from_euler(0, 0, yaw)
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
-    pose_local = tf_buffer.transform(frameto, TRANSFORM_TIMEOUT)
+    pose_local = tf_buffer.transform(p, frameto)
     target_x = pose_local.pose.position.x
     target_y = pose_local.pose.position.y
     target_yaw = euler_from_orientation(pose_local.orientation)[2]
