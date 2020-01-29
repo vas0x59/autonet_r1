@@ -5,8 +5,8 @@ class MedianArray:
         self.val = d_val
         self.th = th
     def update(self, y):
-        if abs(y - (sum(self.arr) / len(self.arr))) > self.th:
-            y = (sum(self.arr) / len(self.arr))
+        # if abs(y - (sum(self.arr) / len(self.arr))) > self.th:
+        #     y = (sum(self.arr) / len(self.arr))
         self.arr.append(y)
         self.arr = self.arr[-self.window:]
         qwe = 0

@@ -7,7 +7,7 @@ import tf2_ros
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32, Int16, Bool
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped
-from autonet_r1.srv import SetOdom
+from autonet_r1.srv import SetOdom, SetOdomResponse
 from autonet_r1.src.tools.tf_tools import *
 import math
 
@@ -67,12 +67,13 @@ def m2tv_clb(data):
 def set_odom(data):
     global odometry_c
     odometry_c.set(data.x, data.y, data.yaw)
+    return SetOdomResponse()
 
 
 rospy.Subscriber("/motor1", Float32, m1tv_clb)
 rospy.Subscriber("/motor2", Float32, m2tv_clb)
 # rospy.Subscriber("/yaw_speed", Float32, m2tv_clb)
-set_odom_srv = rospy.Service('set_odometry', SetOdom, set_odom)
+set_odom_srv = rospy.Service('set_odom', SetOdom, set_odom)
 # rospy.Subscriber("/set_odom", Bool, set_odom())
 # rospy.Subscriber("/navigate", Pose, m1tv_clb)
 

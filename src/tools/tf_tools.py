@@ -1,12 +1,18 @@
 import rospy
 import tf
 import tf2_ros
+# import tf2_geometry_msgs
+import geometry_msgs
 import math
-
+# geometry_msgs.msg.
+# tf.transformations.
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32, Int16, Bool
-from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped
+from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, TransformStamped, PoseStamped
 import tf.transformations as t
+# import tf2
+
+TRANSFORM_TIMEOUT = 1
 
 def get_dist(x1, y1, x2, y2):
     return ((x1-x2) ** 2 + (y1-y2) ** 2)**0.5
@@ -20,6 +26,30 @@ def offset_yaw(yaw, zer_yaw):
         itog+= 1.0 * math.pi
     return itog
 
+# def transform_point(transformation, point_wrt_source):
+#     # tf2_ros.
+#     point_wrt_target = \
+#         tf2_geometry_msgs.do_transform_point(PointStamped(point=point_wrt_source),
+#             transformation).point
+#     return [point_wrt_target.x, point_wrt_target.y, point_wrt_target.z]
+
+
+def get_transformation(source_frame, target_frame,tf_buffer,
+                       tf_cache_duration=2.0):
+    # tf_buffer = tf2_ros.Buffer(rospy.Duration(tf_cache_duration))
+    # tf2_ros.TransformListener(tf_buffer)
+
+    # get the tf at first available time
+    try:
+        transformation = tf_buffer.lookup_transform(target_frame,
+                source_frame, rospy.Time(0), rospy.Duration(0.1))
+    except (tf2_ros.LookupException, tf2_ros.ConnectivityException,
+            tf2_ros.ExtrapolationException):
+        rospy.logerr('Unable to find the transformation from %s to %s'
+                     % source_frame, target_frame)
+    return transformation
+
+
 def transform_xy_yaw(x, y, yaw, framefrom, frameto, tf_buffer):
     p = PoseStamped()
     p.header.frame_id = framefrom
@@ -27,7 +57,8 @@ def transform_xy_yaw(x, y, yaw, framefrom, frameto, tf_buffer):
     p.pose.position.y = y
     p.pose.orientation = orientation_from_euler(0, 0, yaw)
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
-    pose_local = tf_buffer.transform(framefrom, frameto, TRANSFORM_TIMEOUT)
+    # pose_local = tf2_geometry_msgs.do_transform_point(p, get_transformation(framefrom, frameto, tf_buffer))
+    pose_local == tf_buffer.transform(p, frameto)
     target_x = pose_local.pose.position.x
     target_y = pose_local.pose.position.y
     target_yaw = euler_from_orientation(pose_local.orientation)[2]
