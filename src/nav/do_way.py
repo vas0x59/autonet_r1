@@ -18,7 +18,7 @@ from autonet_r1.src.tools.tf_tools import *
 p1 = input("start")
 p2 = input("p2")
 
-rospy.init_node("get_path")
+rospy.init_node("do_way", anonymous=True)
 map_path = rospy.get_param("~map", "../maps/map_1.json")
 map_c_path = rospy.get_param(
     "~map_coordinates", "../maps/map_coordinates_1.json")
