@@ -19,7 +19,7 @@ def img_clb(data):
     out_img = cv_image.copy()
     # cv2.imshow("Image window", cv_image)
     # cv2.waitKey(3)
-    e1, e2, out_img = rl.reg_line(cv_image, show=True)
+    e1, e2, out_img = rl.reg_line(cv_image, show=False)
     lr_msg = LaneRes()
     # lr_msg.color = str(color)
     lr_msg.e1 = e1
