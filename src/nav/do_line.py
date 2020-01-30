@@ -16,11 +16,11 @@ from autonet_r1.src.tools.tf_tools import *
 from autonet_r1.src.motors.PID import PID
 
 E1_K = 0.5
-E2_k = 0.5
+E2_K = 0.5
 
 PID_P = 0.1
 PID_I = 0
-PID_D = 0
+PID_D = 0.01
 
 target_speed = 0.3
 
@@ -46,7 +46,7 @@ pid_l = PID(PID_P, PID_I, PID_D)
 
 def calc():
     global m1, m2, lr_e1, lr_e2, lr_color, pid_l, E1_K, E2_K, target_speed
-    error = (lr_e1*E1_K + lr_e2*E2_K) / (E1_K+E2_K)
+    error = (lr_e1*E1_K + lr_e2*E2_K)
     print("err", error, "e1", lr_e1, "e2", lr_e2)
 
     a = pid_l.calc(error - 0) * target_speed
