@@ -27,7 +27,7 @@ def img_clb(data):
     # lr.e1 = 
     res_pub.publish(lr_msg)
     image_pub.publish(bridge.cv2_to_imgmsg(out_img, "bgr8"))
-    cv2.waitKey(1)
+    # cv2.waitKey(1)
 
 
 image_sub = rospy.Subscriber(

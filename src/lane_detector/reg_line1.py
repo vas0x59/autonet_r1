@@ -6,7 +6,7 @@ import numpy as np
 
 
 class RegLine:
-    def __init__(self, img_size=[300, 460]):
+    def __init__(self, img_size=[270, 414]):
         self.img_size = img_size
         self.points = []
         # self.src = np.float32([[20, 200],
@@ -46,7 +46,7 @@ class RegLine:
         self.src = np.float32([[-90, 280],
                                [550, 280],
                                [400, 200],
-                               [60, 200]])
+                               [60, 200]]) * 0.9
 
 
 
