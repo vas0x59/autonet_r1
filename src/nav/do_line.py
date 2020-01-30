@@ -11,16 +11,16 @@ from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamp
 from std_msgs.msg import Float32
 
 from autonet_r1.srv import Navigate, GetPath, SetNav, GetTelemetry, GetGrabPath
-from autonet_r1.msg import LaneRes, Addres, PathNamed3, PathNamed2
+from autonet_r1.msg import LaneRes, PathNamed3, PathNamed2
 from autonet_r1.src.tools.tf_tools import *
 from autonet_r1.src.motors.PID import PID
 
 E1_K = 0.5
 E2_K = 0.5
 
-PID_P = 0.1
+PID_P = 0.05
 PID_I = 0
-PID_D = 0.01
+PID_D = 0
 
 target_speed = 0.3
 
@@ -49,13 +49,13 @@ def calc():
     error = (lr_e1*E1_K + lr_e2*E2_K)
     print("err", error, "e1", lr_e1, "e2", lr_e2)
 
-    a = pid_l.calc(error - 0) * target_speed
+    a = pid_l.calc(error - 0)
     m1.publish(float(target_speed - a))
     m2.publish(float(target_speed + a))
     
 
 
-r = rospy.Rate(5)  # 10hz
+r = rospy.Rate(10)  # 10hz
 while not rospy.is_shutdown():
     calc()
     r.sleep()
