@@ -25,10 +25,10 @@ def main():
     while not rospy.is_shutdown():
         global cmd
         if (cmd == 1):
-            print("take")
+
             take()
         if (cmd == 2):
-            print("throw")
+
             throw()
 
 
