@@ -15,14 +15,14 @@
 
 ```
 ## subscribers
-* grab/cmd           type:std_msgs/String тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
-* arduino/analogin_1 type:std_msgs/Int16 0 если кномка наверху нажата, 1023 если отпущена
-* arduino/analogin_2 type:std_msgs/Int16 0 если кномка снизу нажата, 1023 если отпущена
+* grab/cmd           type:std_msgs/Int16 тут мы ждем сообщение 1 для захвата и 2 для выгрузки
 ## publishers
-* arduino/servo1 type:std_msgs/Int16 серва для захвата
-* arduino/servo2 type:std_msgs/Int16 серва для подьема
-## nodes
-* graber
+* arduino/servo1 type:std_msgs/Int16 серва для подьема
+* arduino/servo2 type:std_msgs/Int16 серва для захвата
 
-
+## servo
+* pub1.publish(180) - 
+* pub1.publish(0) - 
+* pub2.publish(180) - 
+* pub2.publish(0) - 
 by Viktor
