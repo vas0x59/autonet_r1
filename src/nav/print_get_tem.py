@@ -19,5 +19,5 @@ get_telemetry = rospy.ServiceProxy('get_telemetry', GetTelemetry)
 r = rospy.Rate(2)
 while True:
     # print("nav", get_telemetry(frame="nav"))
-    print("map", get_telemetry(frame="map"))
+    print(get_telemetry(frame="odom"))
     r.sleep()
