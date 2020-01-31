@@ -5,7 +5,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import cv2
 from autonet_r1.msg import LaneRes
-from reg_line1 import RegLine
+from reg_line1_oneL import RegLine
 bridge = CvBridge()
 
 image_pub = rospy.Publisher("/lane/debug_img",Image)
@@ -19,7 +19,7 @@ def img_clb(data):
     out_img = cv_image.copy()
     # cv2.imshow("Image window", cv_image)
     # cv2.waitKey(3)
-    e1, e2, out_img = rl.reg_line(cv_image, show=False)
+    e1, e2, out_img = rl.reg_line(cv_image, show=True)
     lr_msg = LaneRes()
     # lr_msg.color = str(color)
     lr_msg.e1 = e1
@@ -27,7 +27,7 @@ def img_clb(data):
     # lr.e1 = 
     res_pub.publish(lr_msg)
     image_pub.publish(bridge.cv2_to_imgmsg(out_img, "bgr8"))
-    # cv2.waitKey(1)
+    
 
 
 image_sub = rospy.Subscriber(
