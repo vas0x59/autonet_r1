@@ -22,9 +22,6 @@ LOCAL_FRAME = "nav"
 """
 
 
-
-
-
 rospy.init_node('navigate')
 config_path = rospy.get_param("~config", "navigate_config.json")
 motors_path = rospy.get_param("~motors_config", "../motors/config.json")
@@ -51,10 +48,12 @@ r_y = 0
 r_yaw = 0
 
 
-tf_buffer = tf2_ros.Buffer()
-tf_listener = tf2_ros.TransformListener(tf_buffer)
+# tf_buffer = tf.Buffer()
+tf_listener = tf.TransformListener()
 
 # tf_buffer.
+
+
 def nav_clb(data: PoseStamped):
     global r_x, r_y, r_yaw
     # data.pose.position
@@ -70,7 +69,7 @@ start_yaw = 0
 
 
 def handle_navigate(req: Navigate):
-    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id, nav_state, target_frame, tf_buffer
+    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id, nav_state, target_frame, tf_listener
     time_r = rospy.Time.now().to_sec()
     # target_x = req.x
     # target_y = req.y
@@ -81,16 +80,19 @@ def handle_navigate(req: Navigate):
     nav_state = "start"
     target_id = req.id
     target_frame = req.frame
-    p = PoseStamped()
-    p.header.frame_id = req.frame
-    p.pose.position.x = req.x
-    p.pose.position.y = req.y
-    p.pose.orientation = orientation_from_euler(0, 0, req.yaw)
+    # p = PoseStamped()
+    # p.header.frame_id = req.frame
+    # p.pose.position.x = req.x
+    # p.pose.position.y = req.y
+    # p.pose.orientation = orientation_from_euler(0, 0, req.yaw)
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
-    pose_local = tf_buffer.transform(p, LOCAL_FRAME, TRANSFORM_TIMEOUT)
-    target_x = pose_local.pose.position.x
-    target_y = pose_local.pose.position.y
-    target_yaw = euler_from_orientation(pose_local.orientation)[2]
+    # pose_local = tf_buffer.transform(p, LOCAL_FRAME, TRANSFORM_TIMEOUT)
+    target_x, target_y, target_yaw  = transform_xy_yaw(
+        req.x, req.y, req.yaw, req.frame, LOCAL_FRAME, tf_listener)
+    # target_x = pose_local.pose.position.x
+    # target_y = pose_local.pose.position.y
+    # target_yaw = euler_from_orientation(pose_local.orientation)[2]
+    print("OK")
     return NavigateResponse()
 
 
@@ -104,17 +106,17 @@ yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]
 while not rospy.is_shutdown():
     # global nav_state
     # calc()
-    print(nav_state, mode)
+    # print(nav_state, mode)
     if nav_state == "start":
-        
+        print(nav_state, mode)
         yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
         start_yaw = r_yaw
         nav_state = "rotate"
         yaw_pid = PID(
-                    config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
+            config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
-
+        print(nav_state, mode)
         print("yaw_to_point", yaw_to_point)
         if (abs(offset_yaw(r_yaw, yaw_to_point)) >= config["yaw_th"]):
             v = motors_config["robot_W"] * config["yaw_speed"]
@@ -137,14 +139,17 @@ while not rospy.is_shutdown():
                     m2.publish(float(0))
                 nav_state = "done"
     if nav_state == "going":
-        # yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
-        pid_r = yaw_pid.calc(yaw_to_point - r_yaw) * target_speed
-        m1.publish(float(target_speed - pid_r))
-        m2.publish(float(target_speed + pid_r))
-        print(get_dist(r_x, r_y, target_x, target_y), float(config["dist_th"]))
+        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+        pid_r = yaw_pid.calc(offset_yaw(r_yaw, yaw_to_point))
+        m1.publish(float(target_speed + pid_r))
+        m2.publish(float(target_speed - pid_r))
+        print("sp left", float(target_speed - pid_r), float(target_speed + pid_r))
+        # print(get_dist(r_x, r_y, target_x, target_y), float(config["dist_th"]))
         if get_dist(r_x, r_y, target_x, target_y) < float(config["dist_th"]):
-            print("TRUE")
-            nav_state == "done"
+            # global nav_state
+            print("TRUE", nav_state)
+            nav_state = "done"
+            print("TRUE2", nav_state)
             print(nav_state)
             if target_stopper == True:
                 m1.publish(float(0))
