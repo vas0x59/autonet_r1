@@ -116,7 +116,7 @@ def calc_odometry():
         prev_m1_m = cm1
         prev_m2_m = cm2
 
-        odom_quat = tf.transformations.quaternion_from_euler(0, 0, th)
+        odom_quat = tf.transformations.quaternion_from_euler(0, 0, -th)
         # odom_broadcaster.sendTransform()
         odom_broadcaster.sendTransform(
             (x, y, 0.),
