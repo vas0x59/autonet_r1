@@ -18,6 +18,6 @@ rospy.init_node("TESt_TEM", anonymous=True)
 get_telemetry = rospy.ServiceProxy('get_telemetry', GetTelemetry)
 r = rospy.Rate(2)
 while True:
-    print("nav", get_telemetry(frame="nav"))
-    # print("map", get_telemetry(frame="map"))
+    # print("nav", get_telemetry(frame="nav"))
+    print("map", get_telemetry(frame="map"))
     r.sleep()
