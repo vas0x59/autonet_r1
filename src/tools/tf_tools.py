@@ -17,7 +17,7 @@ TRANSFORM_TIMEOUT = 1
 def get_dist(x1, y1, x2, y2):
     return ((x1-x2) ** 2 + (y1-y2) ** 2)**0.5
 
-def offset_yaw(yaw, zer_yaw):
+def offset_yaw(yaw, zero_yaw):
     itog = yaw
     itog = yaw - zero_yaw
     if (itog > 1.0 * math.pi):
