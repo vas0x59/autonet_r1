@@ -18,7 +18,7 @@ from autonet_r1.src.motors.PID import PID
 E1_K = 0.5
 E2_K = 0.5
 
-PID_P = 0.05
+PID_P = 0.03
 PID_I = 0
 PID_D = 0
 
