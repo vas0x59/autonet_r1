@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="tf2_ros" type="static_transform_publisher" name="nav_frame" args="0 0 0 0 0 0 nav odom"/>
+    
     <include file="$(find autonet_r1)/launch/motors.launch" />
     <include file="$(find autonet_r1)/launch/nav.launch" />
     
