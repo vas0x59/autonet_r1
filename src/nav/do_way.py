@@ -77,8 +77,8 @@ while True:
 #         break
 
 
-for point_name in path:
-    x, y = tuple(map_coor[point_name][2])
+for point_name in path[2:]:
+    x, y = tuple(map_coor[point_name])
     x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)
     navigate(x=x, y=y, yaw=float('nan'), speed=0.4, frame="map", stopper=True, id="get_path_nav_"+str(round(rospy.Time.now().to_sec(), 1)))
     while True:
