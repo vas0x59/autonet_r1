@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import itemfreq
-from color_recognition_api import knn_classifier as knn_classifier
+from autonet_r1.src.digitRecognition.color_recognition_api import knn_classifier as knn_classifier
 
 
 def color_histogram_of_test_image(test_src_image):

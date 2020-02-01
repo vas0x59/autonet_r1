@@ -2,16 +2,16 @@ import time
 import cv2
 import numpy as np
 
-from OCR import NumReg
+from autonet_r1.src.digitRecognition.OCR import NumReg
 # from shapeDetector import shapeDetector
-from colorRecognition import colorRec
+from autonet_r1.src.digitRecognition.colorRecognition import colorRec
 
 
 
 
 class rec:
     def __init__(self):
-        self.cap = cv2.VideoCapture(1)
+        self.cap = cv2.VideoCapture(0)
         self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
         self.i = 0
         self.filt = ''

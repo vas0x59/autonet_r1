@@ -14,9 +14,21 @@ from autonet_r1.srv import Navigate, GetPath, SetNav, GetTelemetry, GetGrabPath
 from autonet_r1.msg import LaneRes, PathNamed3, PathNamed2
 from autonet_r1.src.tools.tf_tools import *
 from autonet_r1.src.nav.coor_conv import *
+from autonet_r1.src.digitRecognition.rec import *
 
 p1 = "s1"
 p2 = input("p2")
+
+recog = rec()
+# reg = False
+while True:
+    t, c = recog.recog()
+    if len(t) > 0:
+        break
+
+# recog.recog()
+
+
 
 rospy.init_node("do_way", anonymous=True)
 map_path = rospy.get_param("~map", "../maps/map_1.json")
