@@ -8,7 +8,7 @@ class NumReg:
     def get(self, img, show = False, inv = True):
         img = cv2.resize(img, (280, 260))
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        blur = cv2.GaussianBlur(img, (5, 5), 0)
+        #blur = cv2.GaussianBlur(img, (5, 5), 0)
         if inv:
             img = cv2.bitwise_not(img)
         if show:
