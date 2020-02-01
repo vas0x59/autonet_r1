@@ -27,6 +27,8 @@ def throw():
 rospy.Subscriber("/grab/cmd",Int16, callback)
 # rospy.spin()
 r = rospy.Rate(10)
+pub1.publish(180)
+r.sleep()
 while not rospy.is_shutdown():
     if (cmd == 1):
         # print("take")
