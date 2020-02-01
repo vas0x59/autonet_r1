@@ -87,5 +87,5 @@ for point_name in path[2:]:
     while True:
         telem = get_telemetry(frame="nav")
         print(telem)
-        if get_dist(x, -y, telem.x, telem.y) < 0.05:
+        if get_dist(x, y, telem.x, telem.y) < 0.05:
             break
