@@ -39,7 +39,7 @@ class rec:
         _, frame = self.cap.read()
         self.text = self.nr.get(frame, show = False)
         self.color = self.cr.colorRec(frame)
-        print("[DEBUG]", self.color)
+        print("[DEBUG]", self.color, self.text)
         # if self.text == '': return 
         # if int(self.text) > 5: return
         # self.filt += self.text
