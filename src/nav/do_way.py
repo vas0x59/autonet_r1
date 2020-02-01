@@ -89,9 +89,9 @@ while True:
 #     telem = get_telemetry(frame="nav")
 #     if get_dist(x, y, telem.x, telem.y) < 0.05:
 #         break
-print("PATH", path[2:])
+print("PATH", path[3:])
 
-for point_name in path[2:]:
+for point_name in path[3:]:
     x, y = tuple(map_coor[point_name])
     print(x, y)
     x, y = map_to_odom(x-0.1, y, map_coor[p1][0], map_coor[p1][1], p1)
