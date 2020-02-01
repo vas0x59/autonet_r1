@@ -57,14 +57,14 @@ coordinates = {
     "cross2_4": (4.6, 1.1),
     "cross2_5": (4.3, 1.44),
     "cross2_6": (3.74, 1.44),
-    "corner1_s_1": (1.85, 1.1), 
-    "corner1_s_2": (1.36, 1.65), 
-    "corner1_b_2": (1.5, 0.55),
-    "corner1_b_1": (0.8, 1.3),
-    "corner2_s_2": (6.15, 1.1),
-    "corner2_b_1": (6.5, 0.55),
-    "corner2_s_1": (6.7, 1.65),
-    "corner2_b_2": (7.22, 1.3)
+    "corner1_s_1": (1.68, 1.1), 
+    "corner1_s_2": (1.36, 1.48), 
+    "corner1_b_2": (1.3, 0.55),
+    "corner1_b_1": (0.8, 1),
+    "corner2_s_2": (6.32, 1.1),
+    "corner2_b_1": (6.8, 0.55),
+    "corner2_s_1": (6.7, 1.48),
+    "corner2_b_2": (7.22, 1)
 }
 
 font = cv2.FONT_HERSHEY_SIMPLEX

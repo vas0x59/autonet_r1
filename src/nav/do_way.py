@@ -80,7 +80,7 @@ print("PATH", path[2:])
 for point_name in path[2:]:
     x, y = tuple(map_coor[point_name])
     print(x, y)
-    x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)
+    x, y = map_to_odom(x-0.1, y, map_coor[p1][0], map_coor[p1][1], p1)
     print(x, y)
     # break
     navigate(x=x, y=y, yaw=0, speed=0.4, frame="nav", stopper=True, id="get_path_nav_"+str(round(rospy.Time.now().to_sec(), 1)), mode='')
