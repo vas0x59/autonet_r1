@@ -75,7 +75,7 @@ while True:
 #     telem = get_telemetry(frame="nav")
 #     if get_dist(x, y, telem.x, telem.y) < 0.05:
 #         break
-
+print("PATH", path[2:])
 
 for point_name in path[2:]:
     x, y = tuple(map_coor[point_name])
@@ -83,9 +83,9 @@ for point_name in path[2:]:
     x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)
     print(x, y)
     # break
-    navigate(x=x, y=y, yaw=0, speed=0.4, frame="nav", stopper=True, id="get_path_nav_"+str(round(rospy.Time.now().to_sec(), 1)))
+    navigate(x=x, y=y, yaw=0, speed=0.4, frame="nav", stopper=True, id="get_path_nav_"+str(round(rospy.Time.now().to_sec(), 1)), mode='')
     while True:
         telem = get_telemetry(frame="nav")
-        print(telem)
+        # print(telem)
         if get_dist(x, y, telem.x, telem.y) < 0.05:
             break
