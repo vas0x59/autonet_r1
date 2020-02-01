@@ -10,7 +10,7 @@ from PIL import Image
 import os
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from scipy.stats import itemfreq
 from autonet_r1.src.digitRecognition.color_recognition_api import knn_classifier as knn_classifier
 
