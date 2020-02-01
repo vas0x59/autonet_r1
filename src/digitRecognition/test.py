@@ -21,21 +21,24 @@ def most_frequent(s):
 i = 0
 filt = ''
 print("started")
+
 while cv2.waitKey(1) != ord('q'):
     _, frame = cap.read()
     
     if i == 3:
-        print("[DEBUG]", text, color)    
+        print("[DEBUG]", text)    
         i = 0
         filt = ''
     
-    _, frame = cap.read()
-    text = nr.get(frame, show = True)
-    color = cr.colorRec(frame)
     
+    _, frame = cap.read()
+    text = nr.get(frame, show = False)
+    color = cr.colorRec(frame)
+    print("[DEBUG]", color)
     if text == '': continue
     if int(text) > 5: continue
-    
     filt += text
     i += 1
+
 cap.release()
+cv2.destroyAllWindows()
