@@ -37,7 +37,7 @@ class rec:
         
         
         _, frame = self.cap.read()
-        self.text = self.nr.get(frame, show = True)
+        self.text = self.nr.get(frame, show = False)
         self.color = self.cr.colorRec(frame)
         print("[DEBUG]", self.color)
         # if self.text == '': return 
