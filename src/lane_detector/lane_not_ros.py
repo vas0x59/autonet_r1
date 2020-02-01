@@ -2,7 +2,7 @@
 
 
 import cv2
-from reg_line1 import RegLine
+from reg_line1_oneL import RegLine
 
 rl = RegLine()
 
