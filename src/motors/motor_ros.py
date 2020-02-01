@@ -149,7 +149,9 @@ def do():
 
 
     # pass
+print("BBBBBBBBBBBB")
 rospy.sleep(1)
+print("AAAAAAAAAAAAAAAAAAAA")
 # odometry_c.set()
 r = rospy.Rate(update_rate)  # 10hz
 while not rospy.is_shutdown():
