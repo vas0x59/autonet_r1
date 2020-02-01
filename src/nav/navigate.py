@@ -139,7 +139,8 @@ while not rospy.is_shutdown():
                     m2.publish(float(0))
                 nav_state = "done"
     if nav_state == "going":
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+        if get_dist(r_x, r_y, target_x, target_y) > 0.3:
+            yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
         pid_r = yaw_pid.calc(offset_yaw(r_yaw, yaw_to_point))
         m1.publish(float(target_speed + pid_r))
         m2.publish(float(target_speed - pid_r))
