@@ -99,7 +99,7 @@ def handle_navigate(req: Navigate):
 s = rospy.Service('navigate', Navigate, handle_navigate)
 m1 = rospy.Publisher("/motor1", Float32, queue_size=10)
 m2 = rospy.Publisher("/motor2", Float32, queue_size=10)
-cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
+
 r = rospy.Rate(config["update_rate"])  # 10hz
 yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]
               ["i"], config["yaw_pid"]["d"])
@@ -120,23 +120,17 @@ while not rospy.is_shutdown():
         print("yaw_to_point", yaw_to_point)
         if (abs(offset_yaw(r_yaw, yaw_to_point)) >= config["yaw_th"]):
             v = motors_config["robot_W"] * config["yaw_speed"]
-            tw = Twist()
-            tw.linear.x = 0
-            tw.angular.z = v
-            # mv1 = v * ((offset_yaw(r_yaw, yaw_to_point) > 0)*2-1)
-            # mv2 = -v * ((offset_yaw(r_yaw, yaw_to_point) > 0)*2-1)
-            # m1.publish(float(mv1))
-            # m2.publish(float(mv2))
-            cmd_vel.publish(tw)
+            mv1 = v * ((offset_yaw(r_yaw, yaw_to_point) > 0)*2-1)
+            mv2 = -v * ((offset_yaw(r_yaw, yaw_to_point) > 0)*2-1)
+            m1.publish(float(mv1))
+            m2.publish(float(mv2))
             print("Yaw", r_yaw)
         if (abs(offset_yaw(r_yaw, yaw_to_point)) < config["yaw_th"]):
             print("OK")
             if mode != "yaw":
                 nav_state = "going"
-                tw = Twist()
-                tw.linear.x = 0
-                tw.angular.z = 0
-                cmd_vel.publish(tw)
+                m1.publish(float(0))
+                m2.publish(float(0))
                 yaw_pid = PID(
                     config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
             else:
@@ -148,13 +142,9 @@ while not rospy.is_shutdown():
         if get_dist(r_x, r_y, target_x, target_y) > 0.3:
             yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
         pid_r = yaw_pid.calc(offset_yaw(r_yaw, yaw_to_point))
-        # m1.publish(float(target_speed + pid_r))
-        # m2.publish(float(target_speed - pid_r))
-        tw = Twist()
-        tw.linear.x = target_speed
-        tw.angular.z = pid_r
-        cmd_vel.publish(tw)
-        print("tw", tw)
+        m1.publish(float(target_speed + pid_r))
+        m2.publish(float(target_speed - pid_r))
+        print("sp left", float(target_speed - pid_r), float(target_speed + pid_r))
         # print(get_dist(r_x, r_y, target_x, target_y), float(config["dist_th"]))
         if get_dist(r_x, r_y, target_x, target_y) < float(config["dist_th"]):
             # global nav_state
@@ -163,10 +153,8 @@ while not rospy.is_shutdown():
             print("TRUE2", nav_state)
             print(nav_state)
             if target_stopper == True:
-                tw = Twist()
-                tw.linear.x = 0
-                tw.angular.z = 0
-                cmd_vel.publish(tw)
+                m1.publish(float(0))
+                m2.publish(float(0))
 
     # if nav_state == "done":
     #     nav_state = "wait"
