@@ -42,7 +42,7 @@ class RegLine:
         #                        [550, 280],
         #                        [400, 220],
         #                        [60, 220]])
-        ak = 0.26
+        ak = 0.31
         bk = 0.4
         self.src = np.float32([[int(img_size[1]*0), int(img_size[0])],
                                [int(img_size[1]*1), int(img_size[0])],
@@ -245,7 +245,7 @@ class RegLine:
                 self.points[qq-1][0]), int(self.points[qq-1][1])), 2, (0, 80, 255), 1)
             cv2.circle(out_img, (int((self.points[p_s-1][0]+self.points[qq-1][0])/2), int(
                 self.points[p_s-1][1])), 2, (0, 80, 255), 1)
-            err2 = 245 - \
+            err2 = 320 - \
                 (self.points[p_s-1][0]+self.points[qq-1][0])/2
             err = self.points[p_s-1][0]-self.points[qq-1][0]
             err2 /= self.outx
