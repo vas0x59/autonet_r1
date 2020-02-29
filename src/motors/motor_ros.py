@@ -53,7 +53,7 @@ target_x_v = 0
 target_a_z_v = 0
 # m1_v = 0
 # m2_v = 0
-
+cmd_vel_status = True
 
 def m1tv_clb(data):
     global m1_target_v
@@ -74,6 +74,7 @@ def cmd_vel_clb(data: Twist):
     target_x_v = data.linear.x
     target_a_z_v = data.angular.z
     
+    
 
 rospy.Subscriber("/motor1", Float32, m1tv_clb)
 rospy.Subscriber("/motor2", Float32, m2tv_clb)
@@ -87,8 +88,11 @@ set_odom_srv = rospy.Service('set_odom', SetOdom, set_odom)
 # tf2.
 
 def control_motors():
-    global m1_target_v, m2_target_v, m1, m2, m1_pid, m2_pid
+    global m1_target_v, m2_target_v, m1, m2, m1_pid, m2_pid, target_a_z_v, target_x_v, robot_W
     # print("motor_target", m1_target_v - m1.get_v_ms(), m2_target_v - m2.get_v_ms())
+    if cmd_vel_status == True:
+        m1_target_v = target_x_v + target_a_z_v*robot_W/2
+        m2_target_v = target_x_v - target_a_z_v*robot_W/2
     m1.set_power(m1_pid.calc(m1_target_v - m1.get_v_ms()) + m1_target_v*40)
     m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()) + m2_target_v*40)
 
