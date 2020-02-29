@@ -49,7 +49,8 @@ odometry_c = OdometryCalc(w=robot_W)
 
 m1_target_v = 0
 m2_target_v = 0
-
+target_x_v = 0
+target_a_z_v = 0
 # m1_v = 0
 # m2_v = 0
 
@@ -68,10 +69,15 @@ def set_odom(data):
     global odometry_c
     odometry_c.set(data.x, data.y, data.yaw)
     return SetOdomResponse()
-
+def cmd_vel_clb(data: Twist):
+    global target_x_v, target_a_z_v
+    target_x_v = data.linear.x
+    target_a_z_v = data.angular.z
+    
 
 rospy.Subscriber("/motor1", Float32, m1tv_clb)
 rospy.Subscriber("/motor2", Float32, m2tv_clb)
+rospy.Subscriber("/cmd_vel", Twist, cmd_vel_clb)
 # rospy.Subscriber("/yaw_speed", Float32, m2tv_clb)
 set_odom_srv = rospy.Service('set_odom', SetOdom, set_odom)
 # rospy.Subscriber("/set_odom", Bool, set_odom())
