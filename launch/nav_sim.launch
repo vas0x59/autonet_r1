@@ -7,6 +7,7 @@
     <node pkg="tf2_ros" type="static_transform_publisher" name="map_frame" args="0 0 0 0 0 1.57 nav map"/>
     <node pkg="autonet_r1" type="nav.py" name="nav" output="screen" clear_params="true">
         <param name="config" value="$(find autonet_r1)/src/nav/nav_config.json"/>
+        <param name="type" value="sim"/>
     </node>
     <node pkg="autonet_r1" type="navigate.py" name="navigate" output="screen" clear_params="true">
         <param name="config" value="$(find autonet_r1)/src/nav/navigate_config_sim.json"/>
