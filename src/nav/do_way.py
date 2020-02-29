@@ -89,7 +89,7 @@ rospy.sleep(1)
 #     telem = get_telemetry(frame="nav")
 #     if get_dist(x, y, telem.x, telem.y) < 0.05:
 #         break
-print("PATH", path[0:])
+print("Path", path[0:])
 
 for point_name in path[1:]:
     x, y = tuple(map_coor[point_name])
