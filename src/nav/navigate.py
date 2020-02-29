@@ -87,7 +87,7 @@ def handle_navigate(req: Navigate):
     # p.pose.orientation = orientation_from_euler(0, 0, req.yaw)
     # print "Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b))
     # pose_local = tf_buffer.transform(p, LOCAL_FRAME, TRANSFORM_TIMEOUT)
-    target_x, target_y, target_yaw  = transform_xy_yaw(
+    target_x, target_y, target_yaw = transform_xy_yaw(
         req.x, req.y, req.yaw, req.frame, LOCAL_FRAME, tf_listener)
     # target_x = pose_local.pose.position.x
     # target_y = pose_local.pose.position.y
@@ -141,8 +141,10 @@ while not rospy.is_shutdown():
                     config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
             else:
                 if target_stopper == True:
-                    m1.publish(float(0))
-                    m2.publish(float(0))
+                    tw = Twist()
+                    tw.linear.x = 0
+                    tw.angular.z = 0
+                    cmd_vel.publish(tw)
                 nav_state = "done"
     if nav_state == "going":
         if get_dist(r_x, r_y, target_x, target_y) > 0.3:
