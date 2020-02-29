@@ -1,6 +1,6 @@
 {
     "robot_W": 0.32,
-    "wheel_d": 0.07,
+    "wheel_d": 0.076,
     "update_rate": 25,
     "frame_name": "odom",
     "motor_v_pid": {
