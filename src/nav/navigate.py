@@ -37,7 +37,7 @@ target_yaw = 0
 # target_yaw_speed = 0
 target_speed = 0
 target_id = 0
-target_frame = "map"
+target_frame = "nav"
 # setpoint_yaw = 0
 nav_state = "wait"
 
@@ -97,9 +97,12 @@ def handle_navigate(req: Navigate):
 
 
 s = rospy.Service('navigate', Navigate, handle_navigate)
-m1 = rospy.Publisher("/motor1", Float32, queue_size=10)
-m2 = rospy.Publisher("/motor2", Float32, queue_size=10)
+# m1 = rospy.Publisher("/motor1", Float32, queue_size=10)
+# m2 = rospy.Publisher("/motor2", Float32, queue_size=10)
 cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
+
+ps_target_pub = rospy.Publisher('/navigate/target', PoseStamped, queue_size=50)
+
 r = rospy.Rate(config["update_rate"])  # 10hz
 yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]
               ["i"], config["yaw_pid"]["d"])
@@ -107,6 +110,13 @@ while not rospy.is_shutdown():
     # global nav_state
     # calc()
     # print(nav_state, mode)
+    ps_target = PoseStamped()
+    ps_target.header.frame_id = target_frame
+    ps_target.pose.position.x = target_x
+    ps_target.pose.position.y = target_y
+    ps_target.pose.orientation = Quaternion(*tf.transformations.quaternion_from_euler(
+        0, 0, target_yaw))
+    ps_target_pub.publish(ps_target)
     if nav_state == "start":
         print(nav_state, mode)
         yaw_to_point = offset_yaw(math.atan2(target_y-r_y, target_x-r_x), 0)
@@ -116,8 +126,10 @@ while not rospy.is_shutdown():
             config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
+        s
         print(nav_state, mode)
         print("yaw_to_point", yaw_to_point)
+        print("yaw_to_point_d", offset_yaw(r_yaw, yaw_to_point))
         if (abs(offset_yaw(r_yaw, yaw_to_point)) > config["yaw_th"]):
             v = motors_config["robot_W"] * config["yaw_speed"]
             tw = Twist()
@@ -148,7 +160,8 @@ while not rospy.is_shutdown():
                 nav_state = "done"
     if nav_state == "going":
         if get_dist(r_x, r_y, target_x, target_y) > 0.002:
-            yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+            yaw_to_point = offset_yaw(
+                math.atan2(target_y-r_y, target_x-r_x), 0)
         pid_r = yaw_pid.calc(offset_yaw(r_yaw, yaw_to_point))
         # m1.publish(float(target_speed + pid_r))
         # m2.publish(float(target_speed - pid_r))
