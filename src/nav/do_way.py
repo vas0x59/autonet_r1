@@ -103,4 +103,4 @@ for point_name in path[1:]:
         # print(telem)
         if get_dist(x, y, telem.x, telem.y) < 0.05:
             break
-    rospy.sleep(0.8)
+    rospy.sleep(0.15)
