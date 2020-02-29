@@ -23,7 +23,7 @@ def offset_yaw(yaw, zero_yaw):
     if (itog > 1.0 * math.pi):
             itog -= 2.0 * math.pi
     if (itog < -1.0 * math.pi):
-        itog+= 1.0 * math.pi
+        itog+= 2.0 * math.pi
     return itog
 
 # def transform_point(transformation, point_wrt_source):

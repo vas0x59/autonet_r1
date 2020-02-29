@@ -109,7 +109,7 @@ while not rospy.is_shutdown():
     # print(nav_state, mode)
     if nav_state == "start":
         print(nav_state, mode)
-        yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
+        yaw_to_point = offset_yaw(math.atan2(target_y-r_y, target_x-r_x), 0)
         start_yaw = r_yaw
         nav_state = "rotate"
         yaw_pid = PID(
@@ -118,18 +118,18 @@ while not rospy.is_shutdown():
     if nav_state == "rotate":
         print(nav_state, mode)
         print("yaw_to_point", yaw_to_point)
-        if (abs(offset_yaw(r_yaw, yaw_to_point)) >= config["yaw_th"]):
+        if (abs(offset_yaw(r_yaw, yaw_to_point)) > config["yaw_th"]):
             v = motors_config["robot_W"] * config["yaw_speed"]
             tw = Twist()
             tw.linear.x = 0
-            tw.angular.z = v
+            tw.angular.z = v * ((offset_yaw(r_yaw, yaw_to_point) > 0)*2-1)
             # mv1 = v * ((offset_yaw(r_yaw, yaw_to_point) > 0)*2-1)
             # mv2 = -v * ((offset_yaw(r_yaw, yaw_to_point) > 0)*2-1)
             # m1.publish(float(mv1))
             # m2.publish(float(mv2))
             cmd_vel.publish(tw)
             print("Yaw", r_yaw)
-        if (abs(offset_yaw(r_yaw, yaw_to_point)) < config["yaw_th"]):
+        if (abs(offset_yaw(r_yaw, yaw_to_point)) <= config["yaw_th"]):
             print("OK")
             if mode != "yaw":
                 nav_state = "going"
@@ -147,7 +147,7 @@ while not rospy.is_shutdown():
                     cmd_vel.publish(tw)
                 nav_state = "done"
     if nav_state == "going":
-        if get_dist(r_x, r_y, target_x, target_y) > 0.3:
+        if get_dist(r_x, r_y, target_x, target_y) > 0.002:
             yaw_to_point = math.atan2(target_y-r_y, target_x-r_x)
         pid_r = yaw_pid.calc(offset_yaw(r_yaw, yaw_to_point))
         # m1.publish(float(target_speed + pid_r))
