@@ -19,12 +19,12 @@ from autonet_r1.src.digitRecognition.rec import *
 p1 = "s1"
 p2 = input("p2")
 
-recog = rec()
+# recog = rec()
 # reg = False
-while True:
-    t, c = recog.recog()
-    if len(t) > 0:
-        break
+# while True:
+#     t, c = recog.recog()
+#     if len(t) > 0:
+#         break
 
 # recog.recog()
 
@@ -61,7 +61,7 @@ path_pub.publish(PathNamed3(path=path, start=p1, end=p2))
 #         yr = x - map_coor["s2"][1]
 #     return xr, yr
 # set_nav(x=0, y=0, yaw=0, mode="all")
-set_nav(x=0, y=0, yaw=0, mode="all")
+set_nav(x=0, y=0, yaw=0, mode="")
 rospy.sleep(1)
 # def navigate_wait(x=0, y=0, yaw=0, frame=0, th=0.02):
 #     # while
@@ -91,7 +91,7 @@ rospy.sleep(1)
 #         break
 print("PATH", path[0:])
 
-for point_name in path[0:]:
+for point_name in path[1:]:
     x, y = tuple(map_coor[point_name])
     # print(x, y)
     x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)

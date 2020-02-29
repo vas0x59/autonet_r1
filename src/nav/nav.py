@@ -91,8 +91,8 @@ def calc():
     global odom_x, odom_y, odom_yaw, navx_yaw, zero_x, zero_y, zero_yaw, res_x, res_y, res_yaw
     res_x = (odom_x*config["odom_xy_w"]) / (config["odom_xy_w"]) - zero_x
     res_y = (odom_y*config["odom_xy_w"]) / (config["odom_xy_w"]) - zero_y
-    res_yaw = (odom_yaw*config["odom_yaw_w"] + navx_yaw*config["navx_yaw_w"]
-               ) / (config["odom_yaw_w"] + config["navx_yaw_w"]) - zero_yaw
+    res_yaw = offset_yaw((odom_yaw*config["odom_yaw_w"] + navx_yaw*config["navx_yaw_w"]
+               ) / (config["odom_yaw_w"] + config["navx_yaw_w"]), zero_yaw)
 
     current_time = rospy.Time.now()
     quat = tf.transformations.quaternion_from_euler(0, 0, res_yaw)
