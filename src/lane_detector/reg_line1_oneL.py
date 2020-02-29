@@ -43,10 +43,10 @@ class RegLine:
         #                        [400, 220],
         #                        [60, 220]])
 
-        self.src = np.float32([[int(img_size[1]*0.3), int(img_size[0])],
+        self.src = np.float32([[int(img_size[1]*0), int(img_size[0])],
                                [int(img_size[1]*1), int(img_size[0])],
-                               [int(img_size[1]*0.65), int(img_size[0]*0.3)],
-                               [int(img_size[1]*0.3), int(img_size[0]*0.3)]])
+                               [int(img_size[1]*0.666), int(img_size[0]*0.333)],
+                               [int(img_size[1]*0.333), int(img_size[0]*0.333)]])
 
         # self.src = np.float32([[0, 299],
         #            [399, 299],
