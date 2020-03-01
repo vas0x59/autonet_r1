@@ -17,8 +17,8 @@ from autonet_r1.src.nav.coor_conv import *
 from autonet_r1.src.digitRecognition.rec import *
 from autonet_r1.src.motors.PID import PID
 
-p1 = "s1"
-p2 = input("p2")
+start_point = "s1"
+point_to = input("p2")
 
 # recog = rec()
 # reg = False
@@ -70,6 +70,7 @@ def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode=''
         if get_dist(x, y, telem.x, telem.y) < th:
             break
         r.sleep()
+            
 
 # Line
 
@@ -90,7 +91,7 @@ pid_l = PID(PID_P, PID_I, PID_D)
 
 
 def calc_line():
-    global m1, m2, lr_e1, lr_e2, lr_color, pid_l, E1_K, E2_K, target_speed
+    global m1, m2, lr_e1, lr_e2, lr_color, pid_l, E1_K, E2_K, target_speed, cmd_vel
     error = (lr_e1*E1_K + lr_e2*E2_K)
     print("err", error, "e1", lr_e1, "e2", lr_e2)
 
@@ -98,15 +99,15 @@ def calc_line():
     # m1.publish(float(target_speed - a))
     # m2.publish(float(target_speed + a))
     tw = Twist()
-    tw.linear.x = target_speed
+    tw.linear.x = 0.21
     tw.angular.z = a
     cmd_vel.publish(tw)
 
 
 # Path
-path = get_path(start=p1, end=p2).path
+path = get_path(start=start_point, end=point_to).path
 print(path)
-path_pub.publish(PathNamed3(path=path, start=p1, end=p2))
+path_pub.publish(PathNamed3(path=path, start=start_point, end=point_to))
 
 
 def get_typeof_point(s: str):
@@ -128,42 +129,115 @@ def get_typeof_transition(p1, p2):
     elif (p1[0] == "building" or p1[0] == "grab") and p2[0] == "corner":
         return "lane_follow"
     elif p1[0] == "corner" and (p2[0] == "building" or p2[0] == "grab"):
-        return "lane_follow"
+        # return "lane_follow"
+        return "navigate"
     elif (p1[0] == "building" or p1[0] == "grab") and p2[0] == "cross":
         return "lane_follow_cor"
     elif p1[0] == "cross" and (p2[0] == "building" or p2[0] == "grab"):
-        return "lane_follow"
+        # return "lane_follow"
+        return "navigate"
+    elif p1[0] == "cross" and p2[0] == "cross":
+        return "cross"
     else:
         return "navigate"
 
+
+def lane_follow_transition(p1, p2):
+    global calc
+    th = 0.1
+    x_m, y_m = tuple(map_coor[p2])
+    # print(x, y)
+    x, y = map_to_odom(
+        x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
+    r = rospy.Rate(10)  # 10hz
+    while not rospy.is_shutdown():
+        calc_line()
+        r.sleep()
+        telem = get_telemetry(frame="nav")
+        if get_dist(x, y, telem.x, telem.y) < th:
+            break
+    tw = Twist()
+    tw.linear.x = 0
+    tw.angular.z = 0
+    cmd_vel.publish(tw)
+    return "DONE"
+
+
+def navigate_transition(p1, p2):
+    x_m, y_m = tuple(map_coor[p2])
+    # print(x, y)
+    x, y = map_to_odom(
+        x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
+    print("INFO", "COOR_TO", x, y)
+    # break
+    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+                  frame="nav", stopper=True, mode='')
+    return "DONE"
+
+
+def cross_transition(p1, p2):
+    x_m, y_m = tuple(map_coor[p2])
+    # print(x, y)
+    x, y = map_to_odom(
+        x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
+    print("INFO", "COOR_TO", x, y)
+    # break
+    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+                  frame="nav", stopper=True, mode='')
+    return "DONE"
+
+
+def corner_transition(p1, p2):
+    x_m, y_m = tuple(map_coor[p2])
+    # print(x, y)
+    x, y = map_to_odom(
+        x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
+    print("INFO", "COOR_TO", x, y)
+    # break
+    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+                  frame="nav", stopper=True, mode='')
+    return "DONE"
+
+
+transition_funs = {"lane_follow": lane_follow_transition,
+                   "cross": cross_transition, "navigate": navigate_transition,
+                   "corner": corner_transition}
 
 set_nav(x=0, y=0, yaw=0, mode="")
 rospy.sleep(1)
 
 print("Path", path[0:])
-prev_point = p1
+prev_point = start_point
 
 for point_name in ["round1_1", "g1"]:
     x, y = tuple(map_coor[point_name])
     # print(x, y)
-    x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)
+    x, y = map_to_odom(x, y, map_coor[start_point][0], map_coor[start_point][1], start_point)
     print(x, y)
     # break
     navigate_wait(x=x, y=y, yaw=0, speed=0.3,
                   frame="nav", stopper=True, mode='')
     prev_point = point_name
     rospy.sleep(0.15)
-
 
 
 for point_name in path[3:]:
-    trans_type = get_typeof_transition(prev_point, point_name)
-    x, y = tuple(map_coor[point_name])
-    # print(x, y)
-    x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)
-    print(x, y)
-    # break
-    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
-                  frame="nav", stopper=True, mode='')
+    trans_type = get_typeof_transition(get_typeof_point(prev_point), get_typeof_point(point_name))
+    print("INFO", trans_type, "FROM", prev_point, "TO", point_name)
+    if trans_type in transition_funs.keys():
+        transition_funs[trans_type](prev_point, point_name)
+    else:
+        print("WARN", "transition not found", "GO BY NAVIGATE")
+        x_m, y_m = tuple(map_coor[point_name])
+        # print(x, y)
+        x, y = map_to_odom(
+            x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
+        print("INFO", "COOR_TO", x, y)
+        # break
+        navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+                      frame="nav", stopper=True, mode='')
     prev_point = point_name
+    print("INFO", "TO", point_name, "DONE")
     rospy.sleep(0.15)
+navigate_wait(x=0, y=0, yaw=0, speed=0.4,
+                      frame="nav", stopper=True, mode='')
