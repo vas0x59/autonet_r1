@@ -27,6 +27,7 @@
 ### IN
  * /motor1 type:std_msgs/Float32 - скорость в m/s
  * /motor2 type:std_msgs/Float32 - скорость в m/s
+ * /cmd_nav type:geometry_msgs/Twist - target speed
 
 ## Files
 Motor.py - работа с моторами \
