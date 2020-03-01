@@ -6,9 +6,9 @@ import math
 import numpy as np
 import json
 
-from nav_msgs.msg import Odometry
+from nav_msgs.msg import Odometry, Path
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamped
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Header
 
 from autonet_r1.srv import Navigate, GetPath, SetNav, GetTelemetry, GetGrabPath
 from autonet_r1.msg import LaneRes, PathNamed3, PathNamed2
@@ -33,9 +33,9 @@ point_to = input("p2")
 rospy.init_node("do_way", anonymous=True)
 
 # Config
-map_path = rospy.get_param("~map", "../maps/map_1.json")
+map_path = rospy.get_param("~map", "../src/maps/map_1.json")
 map_c_path = rospy.get_param(
-    "~map_coordinates", "../maps/map_coordinates_1.json")
+    "~map_coordinates", "../src/maps/map_coordinates_1.json")
 print(map_path, map_c_path)
 
 map_conn = json.load(open(map_path))
@@ -58,6 +58,8 @@ set_nav = rospy.ServiceProxy('set_nav', SetNav)
 get_path = rospy.ServiceProxy('get_path', GetPath)
 get_grab_path = rospy.ServiceProxy('get_grab_path', GetGrabPath)
 path_pub = rospy.Publisher('/path', PathNamed3)
+path_nav_pub = rospy.Publisher('/path_ros', Path)
+
 
 
 def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode='', th=0.06, id=""):
@@ -108,6 +110,12 @@ def calc_line():
 path = get_path(start=start_point, end=point_to).path
 print(path)
 path_pub.publish(PathNamed3(path=path, start=start_point, end=point_to))
+path_nav = Path()
+path_nav.header.frame_id = "nav"
+path_nav.poses = [PoseStamped(header=Header(frame_id="nav"), pose=Pose(position=Point(x, y, 0))) for x, y in [map_to_odom(
+    map_coor[p][0], map_coor[p][1], map_coor[start_point][0], map_coor[start_point][1], start_point) for p in path]]
+path_nav_pub.publish(path_nav)
+# PoseStamped().pose.position.
 
 
 def get_typeof_point(s: str):
@@ -227,6 +235,7 @@ print("Path", path[0:])
 prev_point = start_point
 
 for point_name in ["round1_1", "g1"]:
+    path_nav_pub.publish(path_nav)
     x, y = tuple(map_coor[point_name])
     # print(x, y)
     x, y = map_to_odom(
@@ -240,6 +249,7 @@ for point_name in ["round1_1", "g1"]:
 
 
 for point_name in path[3:]:
+    path_nav_pub.publish(path_nav)
     trans_type = get_typeof_transition(get_typeof_point(
         prev_point), get_typeof_point(point_name))
     print("INFO", trans_type, "FROM", prev_point, "TO", point_name)
