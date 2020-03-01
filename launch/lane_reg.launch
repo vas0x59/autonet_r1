@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="topic_tools" name="cam_throttle" type="throttle" args="messages camera1/image_raw 18.0 camera1/image_raw/throttled"/>
+    <node pkg="autonet_r1" type="lane_ros.py" name="lane_ros" output="screen" clear_params="true">
+        <!-- <param name="config" value="$(find autonet_r1)/src/motors/config.json"/> -->
+    </node>
+
+</launch>

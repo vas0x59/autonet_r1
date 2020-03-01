@@ -31,7 +31,7 @@ def img_clb(data):
 
 
 image_sub = rospy.Subscriber(
-    "/camera1/image_raw", Image, img_clb)
+    "/camera1/image_raw/throttled", Image, img_clb)
 
 # ic = image_converter()
 rospy.init_node('image_converter', anonymous=True)
