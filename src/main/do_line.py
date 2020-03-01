@@ -30,6 +30,14 @@ lr_e2 = 0
 lr_color = ""
 rospy.init_node("do_line", anonymous=True)
 
+config_path = rospy.get_param("~config", "./line_params.json")
+config = json.load(open(config_path))
+print(config_path, config)
+E1_K = config["E1_K"]
+E2_K = config["E2_K"]
+PID_P = config["pid"]["p"]
+PID_I = config["pid"]["i"]
+PID_D = config["pid"]["d"]
 
 def lr_clb(data):
     global lr_e1, lr_e2, lr_color
