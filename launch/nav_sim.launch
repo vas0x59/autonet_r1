@@ -17,5 +17,8 @@
         <param name="config" value="$(find autonet_r1)/src/nav/navigate_config_sim.json"/>
         <param name="motors_config" value="$(find autonet_r1)/src/motors/config.json"/>
     </node>
-
+    <node pkg="autonet_r1" type="get_path.py" name="get_path" output="screen" clear_params="true">
+        <param name="map" value="$(find autonet_r1)/src/maps/map_1.json"/>
+        <param name="map_coordinates" value="$(find autonet_r1)/src/maps/map_coordinates_1.json"/>
+    </node>
 </launch>
