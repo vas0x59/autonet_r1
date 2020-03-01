@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from autonet_r1.src.maps.graph import Graph
 import json 
 
