@@ -6,7 +6,7 @@ import time
 from MedianArray import MedianArray
 
 class Motor:
-    def __init__(self, n=1, d=0.07):
+    def __init__(self, n=3, d=0.07):
         self.n = n
         self.pub = rospy.Publisher(
             '/arduino/m' + str(self.n), Int16, queue_size=10)
