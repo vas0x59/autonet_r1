@@ -1,15 +1,15 @@
 <launch>
-    <node pkg="tf2_ros" type="static_transform_publisher" name="cam1_frame" args="0 0 0 0 0 0 base_link cam1"/>
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="cam1_frame" args="0 0 0 0 0 0 base_link cam1"/> -->
     <node name="usb_cam1" pkg="usb_cam" type="usb_cam_node" output="screen">
         <param name="video_device" value="/dev/video0" />
         <param name="image_width" value="800" />
         <param name="image_height" value="448" />
         <param name="pixel_format" value="yuyv" />
-        <param name="camera_frame_id" value="cam1" />
+        <param name="camera_frame_id" value="camera_link" />
         <param name="io_method" value="mmap"/>
     </node>
     <node name="image_view" pkg="image_view" type="image_view" respawn="false">
-        <remap from="image" to="/cam1/image_raw"/>
+        <remap from="image" to="/camera/image_raw"/>
         <param name="autosize" value="true" />
     </node>
 </launch>
