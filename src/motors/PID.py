@@ -10,10 +10,12 @@ class PID:
         self.dt = 0
         self.prev_error = 0
         self.first = True
+        self.integral = 0
 
     def calc(self, err):
-        self.integral += err * d_time
+        
         self.dt = (time.time() - self.prev_time)
+        self.integral += err * self.dt
         if self.first == False:
             self.res = self.kP*err + self.kD * \
                 ((err-self.prev_error) / self.dt) + self.kI*self.integral
