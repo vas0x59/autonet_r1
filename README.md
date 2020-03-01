@@ -21,7 +21,8 @@
  * /odom type:nav_msgs/Odometry - одометрия 
  * /cam1/image_raw type:sensor_msgs/Image - камера 1 
  * /cam2/image_raw type:sensor_msgs/Image - камера 2
- * /nav type:geometry_msgs/Pose - позиция робота
+ * /nav type:geometry_msgs/PoseStamped - позиция робота
+ * /cmd_nav type:geometry_msgs/Twist - target speed
 ## Launch
  * motors.launch - запуск системы управления моторами
  * arduino.launch - запуск работы с arduino 
