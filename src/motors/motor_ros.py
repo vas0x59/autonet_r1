@@ -11,7 +11,7 @@ from autonet_r1.srv import SetOdom, SetOdomResponse
 from autonet_r1.src.tools.tf_tools import *
 import math
 
-from Motor import Motor
+from Motor2 import Motor
 from Odometry_calc import OdometryCalc
 import json
 from PID import PID
