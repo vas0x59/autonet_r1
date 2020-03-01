@@ -6,4 +6,5 @@ string mode
 bool stopper
 string id
 string frame
+float32 th
 ---

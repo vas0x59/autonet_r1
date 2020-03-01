@@ -13,6 +13,7 @@ from std_msgs.msg import Float32, Header
 from autonet_r1.srv import Navigate, GetPath, SetNav, GetTelemetry, GetGrabPath
 from autonet_r1.msg import LaneRes, PathNamed3, PathNamed2
 from autonet_r1.src.tools.tf_tools import *
+import autonet_r1.src.tools.calc_trajectory as calc_trajectory
 from autonet_r1.src.nav.coor_conv import *
 from autonet_r1.src.digitRecognition.rec import *
 from autonet_r1.src.motors.PID import PID
@@ -64,7 +65,7 @@ path_nav_pub = rospy.Publisher('/path_ros', Path)
 
 def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode='', th=0.06, id=""):
     navigate(x=x, y=y, yaw=yaw, speed=speed, frame=frame, stopper=stopper,
-             id="navigate_wait_"+str(round(rospy.Time.now().to_sec(), 1)), mode=mode)
+             id="navigate_wait_"+str(round(rospy.Time.now().to_sec(), 1)), mode=mode, th=th)
     r = rospy.Rate(10)  # 10hz
     while True:
         telem = get_telemetry(frame=frame)
@@ -217,10 +218,15 @@ def corner_transition(p1, p2):
     # print(x, y)
     x, y = map_to_odom(
         x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
+    telem = get_telemetry(frame="nav")
+    tr = calc_trajectory.find_trajectory([telem.x, telem.y],[x, y], telem.yaw)
     print("INFO", "COOR_TO", x, y)
     # break
-    navigate_wait(x=x, y=y, yaw=0, speed=0.25,
-                  frame="nav", stopper=True, mode='')
+    for p in tr:
+        navigate_wait(x=p[0], y=p[1], yaw=0, speed=0.1,
+                    frame="nav", stopper=False, mode='only_atan', th=0.1)
+    navigate_wait(x=p[0], y=p[1], yaw=0, speed=0.25,
+                    frame="nav", stopper=True, mode='')
     return "DONE"
 
 

@@ -40,7 +40,7 @@ target_id = 0
 target_frame = "nav"
 # setpoint_yaw = 0
 nav_state = "wait"
-
+target_th = 0.1
 time_r = 0
 # rospy.Time.now().to_sec()
 r_x = 0
@@ -69,7 +69,7 @@ start_yaw = 0
 
 
 def handle_navigate(req: Navigate):
-    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id, nav_state, target_frame, tf_listener
+    global mode, target_x, target_y, target_yaw, target_speed, time_r, target_stopper, target_id, nav_state, target_frame, tf_listener, target_th
     time_r = rospy.Time.now().to_sec()
     # target_x = req.x
     # target_y = req.y
@@ -92,6 +92,7 @@ def handle_navigate(req: Navigate):
     # target_x = pose_local.pose.position.x
     # target_y = pose_local.pose.position.y
     # target_yaw = euler_from_orientation(pose_local.orientation)[2]
+    target_th = req.th
     print("OK")
     return NavigateResponse()
 
@@ -121,12 +122,14 @@ while not rospy.is_shutdown():
         print(nav_state, mode)
         yaw_to_point = offset_yaw(math.atan2(target_y-r_y, target_x-r_x), 0)
         start_yaw = r_yaw
-        nav_state = "rotate"
+        if mode !="only_atan":
+            nav_state = "rotate"
+        else:
+            nav_state = "going"
         yaw_pid = PID(
             config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
         # yaw_pid = PID(config["yaw_pid"]["p"], config["yaw_pid"]["i"], config["yaw_pid"]["d"])
     if nav_state == "rotate":
-        s
         print(nav_state, mode)
         print("yaw_to_point", yaw_to_point)
         print("yaw_to_point_d", offset_yaw(r_yaw, yaw_to_point))
@@ -171,7 +174,7 @@ while not rospy.is_shutdown():
         cmd_vel.publish(tw)
         print("tw", tw)
         # print(get_dist(r_x, r_y, target_x, target_y), float(config["dist_th"]))
-        if get_dist(r_x, r_y, target_x, target_y) < float(config["dist_th"]):
+        if get_dist(r_x, r_y, target_x, target_y) < target_th:
             # global nav_state
             print("TRUE", nav_state)
             nav_state = "done"
