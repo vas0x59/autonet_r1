@@ -19,6 +19,7 @@ class PID:
                 ((err-self.prev_error) / self.dt) + self.kI*self.integral
         else:
             self.res = self.kP*err
+            self.first = False
         self.prev_error = err
         self.prev_time = time.time()
         return self.res
