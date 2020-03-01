@@ -60,7 +60,7 @@ get_grab_path = rospy.ServiceProxy('get_grab_path', GetGrabPath)
 path_pub = rospy.Publisher('/path', PathNamed3)
 
 
-def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode='', th=0.03, id=""):
+def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode='', th=0.06, id=""):
     navigate(x=x, y=y, yaw=yaw, speed=speed, frame=frame, stopper=stopper,
              id="navigate_wait_"+str(round(rospy.Time.now().to_sec(), 1)), mode=mode)
     r = rospy.Rate(10)  # 10hz
@@ -70,7 +70,7 @@ def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode=''
         if get_dist(x, y, telem.x, telem.y) < th:
             break
         r.sleep()
-            
+
 
 # Line
 
@@ -187,7 +187,7 @@ def navigate_transition(p1, p2):
         x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
     print("INFO", "COOR_TO", x, y)
     # break
-    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+    navigate_wait(x=x, y=y, yaw=0, speed=0.25,
                   frame="nav", stopper=True, mode='')
     return "DONE"
 
@@ -199,7 +199,7 @@ def cross_transition(p1, p2):
         x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
     print("INFO", "COOR_TO", x, y)
     # break
-    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+    navigate_wait(x=x, y=y, yaw=0, speed=0.25,
                   frame="nav", stopper=True, mode='')
     return "DONE"
 
@@ -211,14 +211,14 @@ def corner_transition(p1, p2):
         x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
     print("INFO", "COOR_TO", x, y)
     # break
-    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+    navigate_wait(x=x, y=y, yaw=0, speed=0.25,
                   frame="nav", stopper=True, mode='')
     return "DONE"
 
 
 transition_funs = {"lane_follow": lane_follow_transition,
                    "cross": cross_transition, "navigate": navigate_transition,
-                   "corner": corner_transition}
+                   "corner": corner_transition, "lane_follow_cor": lane_follow_transition}
 
 set_nav(x=0, y=0, yaw=0, mode="")
 rospy.sleep(1)
@@ -229,17 +229,19 @@ prev_point = start_point
 for point_name in ["round1_1", "g1"]:
     x, y = tuple(map_coor[point_name])
     # print(x, y)
-    x, y = map_to_odom(x, y, map_coor[start_point][0], map_coor[start_point][1], start_point)
+    x, y = map_to_odom(
+        x, y, map_coor[start_point][0], map_coor[start_point][1], start_point)
     print(x, y)
     # break
-    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+    navigate_wait(x=x, y=y, yaw=0, speed=0.25,
                   frame="nav", stopper=True, mode='')
     prev_point = point_name
     rospy.sleep(0.15)
 
 
 for point_name in path[3:]:
-    trans_type = get_typeof_transition(get_typeof_point(prev_point), get_typeof_point(point_name))
+    trans_type = get_typeof_transition(get_typeof_point(
+        prev_point), get_typeof_point(point_name))
     print("INFO", trans_type, "FROM", prev_point, "TO", point_name)
     if trans_type in transition_funs.keys():
         transition_funs[trans_type](prev_point, point_name)
@@ -251,10 +253,10 @@ for point_name in path[3:]:
             x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
         print("INFO", "COOR_TO", x, y)
         # break
-        navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+        navigate_wait(x=x, y=y, yaw=0, speed=0.25,
                       frame="nav", stopper=True, mode='')
     prev_point = point_name
     print("INFO", "TO", point_name, "DONE")
     rospy.sleep(0.15)
 navigate_wait(x=0, y=0, yaw=0, speed=0.4,
-                      frame="nav", stopper=True, mode='')
+              frame="nav", stopper=True, mode='')
