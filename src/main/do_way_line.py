@@ -15,6 +15,7 @@ from autonet_r1.msg import LaneRes, PathNamed3, PathNamed2
 from autonet_r1.src.tools.tf_tools import *
 from autonet_r1.src.nav.coor_conv import *
 from autonet_r1.src.digitRecognition.rec import *
+from autonet_r1.src.motors.PID import PID
 
 p1 = "s1"
 p2 = input("p2")
@@ -29,8 +30,9 @@ p2 = input("p2")
 # recog.recog()
 
 
-
 rospy.init_node("do_way", anonymous=True)
+
+# Config
 map_path = rospy.get_param("~map", "../maps/map_1.json")
 map_c_path = rospy.get_param(
     "~map_coordinates", "../maps/map_coordinates_1.json")
@@ -48,12 +50,27 @@ PID_P = config["pid"]["p"]
 PID_I = config["pid"]["i"]
 PID_D = config["pid"]["d"]
 
+
+# Movements Services
 get_telemetry = rospy.ServiceProxy('get_telemetry', GetTelemetry)
 navigate = rospy.ServiceProxy('navigate', Navigate)
 set_nav = rospy.ServiceProxy('set_nav', SetNav)
 get_path = rospy.ServiceProxy('get_path', GetPath)
 get_grab_path = rospy.ServiceProxy('get_grab_path', GetGrabPath)
 path_pub = rospy.Publisher('/path', PathNamed3)
+
+
+def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode='', th=0.03, id=""):
+    navigate(x=x, y=y, yaw=yaw, speed=speed, frame=frame, stopper=stopper,
+             id="navigate_wait_"+str(round(rospy.Time.now().to_sec(), 1)), mode=mode)
+    while True:
+        telem = get_telemetry(frame=frame)
+        # print(telem)
+        if get_dist(x, y, telem.x, telem.y) < th:
+            break
+
+# Line
+
 
 def lr_clb(data):
     global lr_e1, lr_e2, lr_color
@@ -69,6 +86,7 @@ cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=10)
 
 pid_l = PID(PID_P, PID_I, PID_D)
 
+
 def calc_line():
     global m1, m2, lr_e1, lr_e2, lr_color, pid_l, E1_K, E2_K, target_speed
     error = (lr_e1*E1_K + lr_e2*E2_K)
@@ -82,61 +100,68 @@ def calc_line():
     tw.angular.z = a
     cmd_vel.publish(tw)
 
+
+# Path
 path = get_path(start=p1, end=p2).path
 print(path)
 path_pub.publish(PathNamed3(path=path, start=p1, end=p2))
 
-# def convert(x, y, ps):
-#     xr = 0
-#     yr = 0
-#     if ps == "s1":
-#         xr = -(y - map_coor["s1"][1])
-#         yr = -(-x - map_coor["s1"][0])
-#     elif ps == "s2":
-#         xr = -y - map_coor["s2"][0]
-#         yr = x - map_coor["s2"][1]
-#     return xr, yr
-# set_nav(x=0, y=0, yaw=0, mode="all")
+
+def get_typeof_point(s: str):
+    if "cross" in s:
+        return "cross", s.split("_")[0][len("cross"):], s.split("_")[1]
+    elif "corner" in s:
+        return "corner", s.split('_')[0][len("corner"):], s.split('_')[1], s.split('_')[2]
+    elif "grab" in s:
+        return "grab", s[len("grab"):]
+    else:
+        return "building", s[0], s[1:]
+
+
+def get_typeof_transition(p1, p2):
+    if p1[0] == "building" and p2[0] == "building":
+        return "lane_follow"
+    elif p1[0] == "corner" and p2[0] == "corner":
+        return "corner"
+    elif (p1[0] == "building" or p1[0] == "grab") and p2[0] == "corner":
+        return "lane_follow"
+    elif p1[0] == "corner" and (p2[0] == "building" or p2[0] == "grab"):
+        return "lane_follow"
+    elif (p1[0] == "building" or p1[0] == "grab") and p2[0] == "cross":
+        return "lane_follow_cor"
+    elif p1[0] == "cross" and (p2[0] == "building" or p2[0] == "grab"):
+        return "lane_follow"
+    else:
+        return "navigate"
+
+
 set_nav(x=0, y=0, yaw=0, mode="")
 rospy.sleep(1)
-# def navigate_wait(x=0, y=0, yaw=0, frame=0, th=0.02):
-#     # while
-#     pass
 
-# x, y = convert(map_coor["round1_1"][0], map_coor["round1_1"][1], p1)    
-# print(x, y)
-# navigate(x=0.4, y=0, yaw=0, speed=0.4, frame="nav", stopper=True, id="123", mode='')
-# while True:
-#     telem = get_telemetry(frame="nav")
-#     if get_dist(0.4, 0, telem.x, telem.y) < 0.05:
-#         break
-# navigate(x=0.4, y=0.42, yaw=0, speed=0.4, frame="nav", stopper=True, id="123", mode='')
-# while True:
-#     telem = get_telemetry(frame="nav")
-#     if get_dist(0.4, 0.42, telem.x, telem.y) < 0.05:
-#         break
-# navigate(x=1.1, y=0.42, yaw=0, speed=0.4, frame="nav", stopper=True, id="123", mode='')
-# while True:
-#     telem = get_telemetry(frame="nav")
-#     if get_dist(1.1, 0.42, telem.x, telem.y) < 0.05:
-#         break
-
-# while True:
-#     telem = get_telemetry(frame="nav")
-#     if get_dist(x, y, telem.x, telem.y) < 0.05:
-#         break
 print("Path", path[0:])
+prev_point = p1
 
-for point_name in path[1:]:
+for point_name in ["round1_1", "g1"]:
     x, y = tuple(map_coor[point_name])
     # print(x, y)
     x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)
     print(x, y)
     # break
-    navigate(x=x, y=y, yaw=0, speed=0.3, frame="nav", stopper=True, id="get_path_nav_"+str(round(rospy.Time.now().to_sec(), 1)), mode='')
-    while True:
-        telem = get_telemetry(frame="nav")
-        # print(telem)
-        if get_dist(x, y, telem.x, telem.y) < 0.05:
-            break
+    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+                  frame="nav", stopper=True, mode='')
+    prev_point = point_name
+    rospy.sleep(0.15)
+
+
+
+for point_name in path[3:]:
+    trans_type = get_typeof_transition(prev_point, point_name)
+    x, y = tuple(map_coor[point_name])
+    # print(x, y)
+    x, y = map_to_odom(x, y, map_coor[p1][0], map_coor[p1][1], p1)
+    print(x, y)
+    # break
+    navigate_wait(x=x, y=y, yaw=0, speed=0.3,
+                  frame="nav", stopper=True, mode='')
+    prev_point = point_name
     rospy.sleep(0.15)
