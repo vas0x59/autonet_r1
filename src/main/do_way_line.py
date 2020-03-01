@@ -63,11 +63,13 @@ path_pub = rospy.Publisher('/path', PathNamed3)
 def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode='', th=0.03, id=""):
     navigate(x=x, y=y, yaw=yaw, speed=speed, frame=frame, stopper=stopper,
              id="navigate_wait_"+str(round(rospy.Time.now().to_sec(), 1)), mode=mode)
+    r = rospy.Rate(10)  # 10hz
     while True:
         telem = get_telemetry(frame=frame)
         # print(telem)
         if get_dist(x, y, telem.x, telem.y) < th:
             break
+        r.sleep()
 
 # Line
 
