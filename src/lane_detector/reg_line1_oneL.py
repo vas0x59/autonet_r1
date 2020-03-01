@@ -143,8 +143,8 @@ class RegLine:
         # warped = self.thresh(warped)
         # warped = cv2.morphologyEx(warped, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
         warped = cv2.medianBlur(warped, 3)
-        if show == True:
-            cv2.imshow("warped", warped)
+        # if show == True:
+        #     cv2.imshow("warped", warped)
 
         histogram = np.sum(warped[warped.shape[0]//2:, :], axis=0)
 
@@ -158,7 +158,7 @@ class RegLine:
             #          (IndWhitestColumnL, warped_visual.shape[0]), 110, 2)
             cv2.line(warped_visual, (IndWhitestColumnR, 0),
                      (IndWhitestColumnR, warped_visual.shape[0]), 110, 2)
-            cv2.imshow("WitestColumn", warped_visual)
+            # cv2.imshow("WitestColumn", warped_visual)
 
         nwindows = 9
         window_height = np.int(warped.shape[0]/nwindows)
@@ -191,7 +191,7 @@ class RegLine:
                 #               (left_win_x2, win_y2), (50 + window * 21, 0, 0), 2)
                 cv2.rectangle(out_img, (right_win_x1, win_y1),
                               (right_win_x2, win_y2), (0, 0, 50 + window * 21), 2)
-                cv2.imshow("windows", out_img)
+                # cv2.imshow("windows", out_img)
 
             # good_left_inds = ((WhitePixelIndY >= win_y1) & (WhitePixelIndY <= win_y2) &
             #                   (WhitePixelIndX >= left_win_x1) & (WhitePixelIndX <= left_win_x2)).nonzero()[0]
@@ -214,8 +214,8 @@ class RegLine:
         #         WhitePixelIndX[left_lane_inds]] = [255, 0, 0]
         out_img[WhitePixelIndY[right_lane_inds],
                 WhitePixelIndX[right_lane_inds]] = [0, 0, 255]
-        if show == True:
-            cv2.imshow("Lane", out_img)
+        # if show == True:
+        #     cv2.imshow("Lane", out_img)
 
         # leftx = WhitePixelIndX[left_lane_inds]
         # lefty = WhitePixelIndY[left_lane_inds]
