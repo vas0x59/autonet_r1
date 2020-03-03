@@ -22,7 +22,7 @@ class Graph:
             path.append(Pr[i, k])
             k = Pr[i, k]
         return [self.p[l] for l in path[::-1]], D[i, j]
-    def find_path_2(p1, p2s, p3):
+    def find_path_2(self, p1, p2s, p3):
         # path = []
         paths12 = []
         for p2 in p2s:

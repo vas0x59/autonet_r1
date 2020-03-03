@@ -32,7 +32,7 @@ s = rospy.Service('get_path', GetPath, handle_get_path)
 def handle_get_grab_path(req):
     global g
     path = []
-    path, d, p2 = g.find_path_2(req.start,reg.stops, req.end)
+    path, d, p2 = g.find_path_2(req.start,req.stops, req.end)
     return GetGrabPathResponse(path, p2)
 
 s2 = rospy.Service('get_grab_path', GetGrabPath, handle_get_grab_path)
