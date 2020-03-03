@@ -40,9 +40,15 @@ def bezier_curve(points, nTimes=1000):
 
 def duga_calc(p1, p2, v=0):
     if v == 0:
-        coords = np.array([p1, [max(p1[0], p2[0]), min(p1[1], p2[1])], p2])
+        if [max(p1[0], p2[0]), max(p1[1], p2[1])] != p1 and p2 !=  [max(p1[0], p2[0]), max(p1[1], p2[1])]:
+            coords = np.array([p1, [max(p1[0], p2[0]), max(p1[1], p2[1])], p2])
+        else:
+            coords = np.array([p1, [max(p1[0], p2[0]), min(p1[1], p2[1])], p2])
     else:
-        coords = np.array([p1, [min(p1[0], p2[0]), max(p1[1], p2[1])], p2])
+        if [min(p1[0], p2[0]), min(p1[1], p2[1])] != p1 and p2 !=  [min(p1[0], p2[0]), min(p1[1], p2[1])]:
+            coords = np.array([p1, [min(p1[0], p2[0]), min(p1[1], p2[1])], p2])
+        else:
+            coords = np.array([p1, [min(p1[0], p2[0]), max(p1[1], p2[1])], p2])
     new_x, new_y = bezier_curve(coords, nTimes=10)
     new_coords = np.vstack([new_x, new_y]).T
     return new_coords
