@@ -42,7 +42,7 @@ class RegLine:
         #                        [550, 280],
         #                        [400, 220],
         #                        [60, 220]])
-        ak = 0.27
+        ak = 0.255
         bk = 0.5
         self.src = np.float32([[int(img_size[1]*0.1), int(img_size[0])],
                                [int(img_size[1]*1), int(img_size[0])],
