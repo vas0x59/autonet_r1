@@ -127,7 +127,7 @@ def get_typeof_point(s: str):
     elif "grab" in s:
         return "grab", s[len("grab"):]
     elif "round" in s:
-        return "cross", s.split("_")[0][len("cross"):], s.split("_")[1]
+        return "cross", s.split("_")[0][len("round"):], s.split("_")[1]
     else:
         return "building", s[0], s[1:]
 
@@ -136,10 +136,8 @@ def get_typeof_transition(p1, p2):
     if p1[0] == "building" and p2[0] == "building":
         return "lane_follow"
     elif p1[0] == "corner" and p2[0] == "corner":
-        if p1[2] == "s":
-            return "lane_follow"
-        else:
-            return "corner"
+        
+        return "corner"
     elif (p1[0] == "building" or p1[0] == "grab") and p2[0] == "corner":
         return "lane_follow"
     elif p1[0] == "corner" and (p2[0] == "building" or p2[0] == "grab"):
@@ -172,9 +170,9 @@ def lane_follow_transition(p1, p2):
     navigate(x=x, y=y, yaw=0, speed=0.25,
              frame="nav", stopper=True, mode='yaw', id="yaw_cor")
     if get_typeof_point(p1)[0] == "building" and get_typeof_point(p2)[0] == "building":
-        rospy.sleep(1)
+        rospy.sleep(0)
     else:
-        rospy.sleep(4)
+        rospy.sleep(1)
     r = rospy.Rate(10)  # 10hz
     while not rospy.is_shutdown():
         calc_line()
@@ -206,10 +204,15 @@ def cross_transition(p1, p2):
     # print(x, y)
     x, y = map_to_odom(
         x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
-    print("INFO", "COOR_TO", x, y)
+    telem = get_telemetry(frame="nav")
+    tr = calc_trajectory.find_trajectory([telem.x, telem.y],[x, y], telem.yaw)
+    print("INFO cross", "COOR_TO", x, y)
     # break
-    navigate_wait(x=x, y=y, yaw=0, speed=0.25,
-                  frame="nav", stopper=True, mode='')
+    for p in tr:
+        navigate_wait(x=p[0], y=p[1], yaw=0, speed=0.1,
+                    frame="nav", stopper=False, mode='only_atan', th=0.1)
+    navigate_wait(x=p[0], y=p[1], yaw=0, speed=0.25,
+                    frame="nav", stopper=True, mode='')
     return "DONE"
 
 
