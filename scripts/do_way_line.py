@@ -108,7 +108,8 @@ def calc_line():
 
 
 # Path
-path = get_path(start=start_point, end=point_to).path
+# path = get_path(start=start_point, end=point_to).path
+path = get_grab_path(start=start_point, end=point_to, stops=["grab1", "grab2", "grab3", "grab4"]).path
 print(path)
 path_pub.publish(PathNamed3(path=path, start=start_point, end=point_to))
 path_nav = Path()
