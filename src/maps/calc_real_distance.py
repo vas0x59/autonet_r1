@@ -12,7 +12,7 @@ def get_dist(p1, p2):
 
 for i in d.keys():
     for j in d[i]:
-        j[1] = get_dist(c[i], c[j[0]])
+        j[1] = round(get_dist(c[i], c[j[0]]), 2)
     print(d[i])
 
 with open("map_1.json", "w") as write_file:
