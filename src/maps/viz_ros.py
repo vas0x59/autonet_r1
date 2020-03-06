@@ -12,9 +12,9 @@ import tf
 
 
 rospy.init_node('viz', anonymous=True)
-map_path = rospy.get_param("~map", "map_1.json")
-map_c_path = rospy.get_param("~map_coordinates", "map_coordinates_1.json")
-pole_img_path = rospy.get_param("~pole_img", "pole.jpg")
+map_path = rospy.get_param("~map", "map_full_1.json")
+map_c_path = rospy.get_param("~map_coordinates", "map_coordinates_full_1.json")
+pole_img_path = rospy.get_param("~pole_img", "full_field_40.jpg")
 print(map_path, map_c_path, pole_img_path)
 
 d = json.load(open(map_path))
