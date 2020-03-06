@@ -16,7 +16,7 @@ d = {
      "g4": [("g2", 0.66)],
      "g5": [("g7", 0.66)],
      "g6": [("g4", 0.66)],
-     "g7": [("park1", 1.27), ("park2", 1.74), ("park3", 2.25), ("c1", 1.42)],
+     "g7": [("park_enter", 0.6)],
      "y1": [("y3", 0.66)],
      "y2": [("cross1_5", 0.66)],
      "y3": [("y5", 0.66)],
@@ -99,7 +99,8 @@ d = {
      "round1_inner1": [("round1_1", 1.1), ("round1_inner4", 0.7)],
      "round1_inner2": [("round1_5", 1)],
      "round1_inner3": [("round1_inner1", 0.8)],
-     "round1_inner4": [("round1_3", 0.6)]
+     "round1_inner4": [("round1_3", 0.6)],
+     "park_enter": [("park1", 1.27), ("park2", 1.74), ("park3", 2.25), ("c1", 0.5)]
 }
 with open("map_full_1.json", "w") as write_file:
     json.dump(d, write_file)
