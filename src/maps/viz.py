@@ -4,14 +4,14 @@ import cv2
 import random
 from graph import Graph
 
-d = json.load(open("map_1.json"))
+d = json.load(open("map_full_1.json"))
 
-coordinates = json.load(open("map_coordinates_1.json"))
+coordinates = json.load(open("map_coordinates_full_1.json"))
 g = Graph(d)
 random.seed(22)
 
 
-pole = cv2.imread("pole.jpg")
+pole = cv2.imread("full_field_40.jpg")
 pole = cv2.resize(pole, (0, 0), fx=0.15, fy=0.15)
 
 font = cv2.FONT_HERSHEY_SIMPLEX
