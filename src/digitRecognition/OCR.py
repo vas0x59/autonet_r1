@@ -5,10 +5,11 @@ import numpy as np
 class NumReg:
     def __init__(self, numbers="0123456789"):
         self.numbers = numbers
-    def get(self, img, show = False, inv = True):
+    def get(self, img, show = False, inv = True, blur = False):
         img = cv2.resize(img, (280, 260))
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        #blur = cv2.GaussianBlur(img, (5, 5), 0)
+        if blur:
+            img = cv2.GaussianBlur(img, (5, 5), 0)
         if inv:
             img = cv2.bitwise_not(img)
         if show:
