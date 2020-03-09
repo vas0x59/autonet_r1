@@ -19,7 +19,7 @@ def img_clb(data):
     out_img = cv_image.copy()
     # cv2.imshow("Image window", cv_image)
     # cv2.waitKey(3)
-    e1, e2, out_img = rl.reg_line(cv_image, show=True)
+    e1, e2, out_img = rl.reg_line(cv_image, show=False)
     lr_msg = LaneRes()
     # lr_msg.color = str(color)
     lr_msg.e1 = e1
@@ -31,7 +31,7 @@ def img_clb(data):
 
 
 image_sub = rospy.Subscriber(
-    "/camera1/image_raw/throttled", Image, img_clb)
+    "/camera1/image_raw", Image, img_clb)
 
 # ic = image_converter()
 rospy.init_node('image_converter', anonymous=True)
