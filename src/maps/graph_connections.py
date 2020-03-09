@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 d = {
-     "s1": [("cross5_2", 1), ("round1_6", 1.83)],
+     "s1": [("cross5_2", 1)],
      "s2": [("cross4_2", 1.83)],
      "g1": [("g3", 0.66)],
      "g2": [("round1_2", 0.41)],
@@ -52,7 +52,7 @@ d = {
      "park2": [("c1", 0.66)],
      "park3": [("c1", 0.66)],
      "park4": [("c4", 0.7), ("b6", 1.83)],
-     "c1": [("r9", 0.7)],
+     "c1": [("r9", 0.7), ("park3", 0.7)],
      "c2": [("g6", 1.5)],
      "c3": [("r2", 0.66)],
      "c4": [("park4", 0.7), ("b6", 2)],
@@ -92,7 +92,7 @@ d = {
      "cross4_2": [("c5", 0.3)],
      "c5": [("grab3", 1.1), ("cross4_1", 0.2)],
      "c6": [("round2_5", 0.8)],
-     "c7": [("s1", 0.7), ("cross5_2", 0.2)],
+     "c7": [("cross5_2", 0.2)],
      "c8": [("grab1", 0.7), ("cross5_1", 0.4)],
      "cross5_1": [("grab1", 0.7), ("c7", "0.5")],
      "cross5_2": [("s1", 0.7), ("round1_6", 2)],
@@ -100,7 +100,7 @@ d = {
      "round1_inner2": [("round1_5", 1)],
      "round1_inner3": [("round1_inner1", 0.8)],
      "round1_inner4": [("round1_3", 0.6)],
-     "park_enter": [("park1", 1.27), ("park2", 1.74), ("park3", 2.25), ("c1", 0.5)]
+     "park_enter": [("park1", 1.27), ("park2", 1.74), ("c1", 0.5)]
 }
 with open("map_full_1.json", "w") as write_file:
     json.dump(d, write_file)
