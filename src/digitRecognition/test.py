@@ -36,7 +36,10 @@ while cv2.waitKey(1) != ord('q'):
     color = cr.colorRec(frame)
     print("[DEBUG]", color)
     if text == '': continue
-    if int(text) > 5: continue
+    try:
+        if int(text) > 5: continue
+    except:
+        continue
     filt += text
     i += 1
 

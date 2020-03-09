@@ -2,10 +2,15 @@ import time
 import cv2
 import numpy as np
 
-from autonet_r1.src.digitRecognition.OCR import NumReg
+try:
+    from autonet_r1.src.digitRecognition.OCR import NumReg
+except:
+    from OCR import NumReg
 # from shapeDetector import shapeDetector
-from autonet_r1.src.digitRecognition.colorRecognition import colorRec
-
+try:
+    from autonet_r1.src.digitRecognition.colorRecognition import colorRec
+except:
+    from colorRecognition import colorRec
 
 
 

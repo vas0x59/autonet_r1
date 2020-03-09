@@ -1,12 +1,18 @@
 import cv2
-from autonet_r1.src.digitRecognition.color_recognition_api import color_histogram_feature_extraction
-from autonet_r1.src.digitRecognition.color_recognition_api import knn_classifier
+try:
+    from color_recognition_api import color_histogram_feature_extraction
+    from color_recognition_api import knn_classifier
+except:
+    from autonet_r1.src.digitRecognition.color_recognition_api import color_histogram_feature_extraction
+    from autonet_r1.src.digitRecognition.color_recognition_api import knn_classifier
 import os
 import os.path
 
 prediction = 'n.a.'
 
-PATH = '/home/ubuntu/autonet_ws/src/autonet_r1/src/digitRecognition/'
+#PATH = '/home/ubuntu/autonet_ws/src/autonet_r1/src/digitRecognition/'
+PATH = './'
+
 
 # if os.path.isfile(PATH + "trainin") and os.access(PATH, os.R_OK):
 #     print ('training data is ready, classifier is loading...')
