@@ -1,6 +1,4 @@
-import time
 import cv2
-import numpy as np
 
 from OCR import NumReg
 from shapeDetector import shapeDetector
