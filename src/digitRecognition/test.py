@@ -23,7 +23,7 @@ def most_frequent(s):
 
 print("started")
 
-while cv2.waitKey(1) != ord('q'):
+while cv2.waitKey(1) != 27:
     _, frame = cap.read()
     text = nr.get(frame, show = True)
     color = cr.colorRec(frame)
