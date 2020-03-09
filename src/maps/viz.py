@@ -4,14 +4,14 @@ import cv2
 import random
 from graph import Graph
 
-d = json.load(open("map_1.json"))
+d = json.load(open("map_full_1.json"))
 
-coordinates = json.load(open("map_coordinates_1.json"))
+coordinates = json.load(open("map_coordinates_full_1.json"))
 g = Graph(d)
 random.seed(22)
 
 
-pole = cv2.imread("pole.jpg")
+pole = cv2.imread("full_field_40.jpg")
 pole = cv2.resize(pole, (0, 0), fx=0.15, fy=0.15)
 
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -62,8 +62,8 @@ def viz_path(path, pole_d):
 
 # plt.show()
 # plt.savefig('graph.png')
-cv2.imshow("pole", pole)
-
+# cv2.imshow("pole", pole)
+cv2.imshow("pole", cv2.resize(pole, (1000, 1000)))
 # cv2.waitKey(0)
 while cv2.waitKey(1) != ord("q"):
     pole_d = pole.copy()
@@ -74,4 +74,5 @@ while cv2.waitKey(1) != ord("q"):
     path, d = g.find_path(p1, p2)
     viz_path(path, pole_d)
     print(path)
-    cv2.imshow("pole", pole_d)
+    # cv2.imshow("pole", pole_d)
+    cv2.imshow("pole", cv2.resize(pole_d, (1000, 1000)))

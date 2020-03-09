@@ -1,6 +1,4 @@
-import time
 import cv2
-import numpy as np
 
 from OCR import NumReg
 from shapeDetector import shapeDetector
@@ -11,34 +9,24 @@ nr = NumReg()
 sd = shapeDetector()
 cr = colorRec()
 
-cap = cv2.VideoCapture(1)
+try:
+    cap = cv2.VideoCapture(0)
+except:
+    cap = cv2.VideoCapture(1)
+
 cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
 
 def most_frequent(s): 
     return max(set(s), key = s.count) 
 
-
-i = 0
-filt = ''
 print("started")
 
-while cv2.waitKey(1) != ord('q'):
+while cv2.waitKey(1) != 27:
     _, frame = cap.read()
-    
-    if i == 3:
-        print("[DEBUG]", text)    
-        i = 0
-        filt = ''
-    
-    
-    _, frame = cap.read()
-    text = nr.get(frame, show = False)
+    text = nr.get(frame, show = True)
     color = cr.colorRec(frame)
-    print("[DEBUG]", color)
     if text == '': continue
-    if int(text) > 5: continue
-    filt += text
-    i += 1
+    print("[DEBUG]", color, most_frequent(text))
 
 cap.release()
 cv2.destroyAllWindows()
