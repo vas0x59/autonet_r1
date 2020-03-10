@@ -122,7 +122,7 @@ class RegLine:
         # M = cv2.getPerspectiveTransform(self.src, self.dst)
         ts = time.time()
         warped = self.wrap(allBinary)
-        print("WARP TIME", (time.time() - ts) * 1000)
+        # print("WARP TIME", (time.time() - ts) * 1000)
         ts = time.time()
         # warped =
         # warped = cv2.adaptiveThreshold(cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY),255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
@@ -153,7 +153,7 @@ class RegLine:
         
         # if show == True:
         #     cv2.imshow("warped", warped)
-        print("Filter TIME", (time.time() - ts) * 1000)
+        # print("Filter TIME", (time.time() - ts) * 1000)
         ts = time.time()
         histogram = np.sum(warped[warped.shape[0]//2:, :], axis=0)
 
@@ -233,7 +233,7 @@ class RegLine:
         rightx = WhitePixelIndX[right_lane_inds]
         righty = WhitePixelIndY[right_lane_inds]
         center_fit = []
-        print("CALC TIME", (time.time() - ts) * 1000)
+        # print("CALC TIME", (time.time() - ts) * 1000)
 
         ts = time.time()
 
@@ -250,7 +250,7 @@ class RegLine:
 
                 # cv2.circle(out_img,(int(gor_ind),int(ver_ind)),2,(255,0,255),1)
                 self.points.append([gor_ind, ver_ind])
-        print("Polyfit TIME", (time.time() - ts) * 1000)
+        # print("Polyfit TIME", (time.time() - ts) * 1000)
         p_s = len(self.points)
         err = 0
         err2 = 0
@@ -269,7 +269,7 @@ class RegLine:
         #     cv2.imshow("CenterLine",out_img)
         # crop = warped[warped.shape[0]-200:warped.shape[0], warped.shape[1]//10*5-50:warped.shape[1]//10*5+50].copy()
         # su = np.sum(crop[:, :])
-        # print("su", su)
+        # # print("su", su)
         # su2 = 0
         # ccc = self.img_size[1]//2
         # if (p_s > 0):
@@ -297,12 +297,12 @@ class RegLine:
         color = "none"
         croped = allBinary[75:, 25:50]
         
-        # print(croped)
+        # # print(croped)
         mean_bgr = croped[0].mean(axis=0)
         s = min([WHITE, GREEN, BLACK, YELLOW], key=lambda x: math.sqrt((x[1][0] - mean_bgr[0])**2 + (x[1][1] - mean_bgr[1])**2 + (x[1][2] - mean_bgr[2])**2))
-        # print(mean_bgr, s[0])
+        # # print(mean_bgr, s[0])
         color = s[0]
-        # print("COLOR TIME", (time.time() - ts) * 1000)
+        # # print("COLOR TIME", (time.time() - ts) * 1000)
         if show == True:
             cv2.imshow("croped_cross", croped)
         if show == True:
