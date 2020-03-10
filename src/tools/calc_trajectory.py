@@ -1,6 +1,6 @@
 import numpy as np
 import scipy
-from  matplotlib  import pyplot as plt
+#from  matplotlib  import pyplot as plt
 from scipy.special import comb
 from autonet_r1.src.tools.tf_tools import *
 def bernstein_poly(i, n, t):
