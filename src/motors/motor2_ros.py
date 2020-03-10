@@ -91,14 +91,14 @@ set_odom_srv = rospy.Service('set_odom', SetOdom, set_odom)
 
 # tf2.
 
-# def control_motors():
-#     global m1_target_v, m2_target_v, m1, m2, m1_pid, m2_pid, target_a_z_v, target_x_v, robot_W
-#     # print("motor_target", m1_target_v - m1.get_v_ms(), m2_target_v - m2.get_v_ms())
-#     if cmd_vel_status == True:
-#         m1_target_v = target_x_v + target_a_z_v*robot_W
-#         m2_target_v = target_x_v - target_a_z_v*robot_W
-#     m1.set_power(m1_pid.calc(m1_target_v - m1.get_v_ms()) + m1_target_v*40)
-#     m2.set_power(m2_pid.calc(m2_target_v - m2.get_v_ms()) + m2_target_v*40)
+def control_motors():
+    global m1_target_v, m2_target_v, m1, m2, m1_pid, m2_pid, target_a_z_v, target_x_v, robot_W
+    # print("motor_target", m1_target_v - m1.get_v_ms(), m2_target_v - m2.get_v_ms())
+    if cmd_vel_status == True:
+        m1_target_v = target_x_v + target_a_z_v*robot_W
+        m2_target_v = target_x_v - target_a_z_v*robot_W
+    motor1.publish(m1_target_v)
+    motor2.publish(m2_target_v)
 
 
 last_time = rospy.Time.now()
@@ -158,7 +158,7 @@ def calc_odometry():
 
 
 def do():
-    # control_motors()
+    control_motors()
     calc_odometry()
 
 
