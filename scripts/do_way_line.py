@@ -226,7 +226,7 @@ def lane_follow_transition_cor(p1, p2, cross_stop=True):
     tw.linear.x = 0
     tw.angular.z = 0
     cmd_vel.publish(tw)
-    if cross_stop == ""
+    # if cross_stop == ""
     return "DONE"
 
 def navigate_transition(p1, p2):
