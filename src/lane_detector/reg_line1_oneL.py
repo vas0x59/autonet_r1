@@ -9,7 +9,7 @@ GREEN = ("green", [0, 255, 0])
 YELLOW = ("yellow", [0, 255, 255])
 WHITE = ("white", [255, 255, 255])
 class RegLine:
-    def __init__(self, img_size=[200, 400]):
+    def __init__(self, img_size=[100, 200]):
         self.img_size = img_size
         self.points = []
         # self.src = np.float32([[20, 200],
@@ -58,8 +58,8 @@ class RegLine:
         #            [80, 200]])
 
         self.src_draw = np.array(self.src, dtype=np.int32)
-        self.outy = 300
-        self.outx = 400
+        self.outy = 150
+        self.outx = 200
         self.dst = np.float32([[0, self.outy],
                                [self.outx, self.outy],
                                [self.outx, 0],
@@ -173,7 +173,7 @@ class RegLine:
 
         nwindows = 9 #9
         window_height = np.int(warped.shape[0]/nwindows)
-        window_half_width = 65
+        window_half_width = 32
 
         # XCenterLeftWindow = IndWhitestColumnL
         XCenterRightWindow = IndWhitestColumnR
@@ -295,7 +295,7 @@ class RegLine:
         # y, x
         ts = time.time()
         color = "none"
-        croped = allBinary[150:, 50:100]
+        croped = allBinary[75:, 25:50]
         
         # print(croped)
         mean_bgr = croped[0].mean(axis=0)
