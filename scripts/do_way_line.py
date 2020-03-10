@@ -155,8 +155,8 @@ def get_typeof_transition(p1, p2):
         return "navigate"
 
 
-def lane_follow_transition(p1, p2):
-    global calc
+def lane_follow_transition(p1, p2, cross_stop=False):
+    global calc_line, lr_color
     th = 0.1
     if get_typeof_point(p1)[0] == "corner":
         if get_typeof_point(p1)[2] == "s":
@@ -181,12 +181,53 @@ def lane_follow_transition(p1, p2):
         telem = get_telemetry(frame="nav")
         if get_dist(x, y, telem.x, telem.y) < th:
             break
+        if cross_stop == True:
+            if lr_color == "black":
+                print("LINE_LINE_LINE")
+                break
     tw = Twist()
     tw.linear.x = 0
     tw.angular.z = 0
     cmd_vel.publish(tw)
     return "DONE"
 
+
+def lane_follow_transition_cor(p1, p2, cross_stop=True):
+    global calc_line, lr_color
+    th = 0.1
+    if get_typeof_point(p1)[0] == "corner":
+        if get_typeof_point(p1)[2] == "s":
+            th = 0.4
+    if get_typeof_point(p2)[0] == "corner":
+        if get_typeof_point(p2)[2] == "s":
+            th = 0.4
+    x_m, y_m = tuple(map_coor[p2])
+    # print(x, y)
+    x, y = map_to_odom(
+        x_m, y_m, map_coor[start_point][0], map_coor[start_point][1], start_point)
+    navigate(x=x, y=y, yaw=0, speed=0.25,
+             frame="nav", stopper=True, mode='yaw', id="yaw_cor")
+    if get_typeof_point(p1)[0] == "building" and get_typeof_point(p2)[0] == "building":
+        rospy.sleep(0)
+    else:
+        rospy.sleep(1)
+    r = rospy.Rate(10)  # 10hz
+    while not rospy.is_shutdown():
+        calc_line()
+        r.sleep()
+        telem = get_telemetry(frame="nav")
+        if get_dist(x, y, telem.x, telem.y) < th:
+            break
+        if cross_stop == True:
+            if lr_color == "black":
+                print("LINE_LINE_LINE")
+                break
+    tw = Twist()
+    tw.linear.x = 0
+    tw.angular.z = 0
+    cmd_vel.publish(tw)
+    if cross_stop == ""
+    return "DONE"
 
 def navigate_transition(p1, p2):
     x_m, y_m = tuple(map_coor[p2])
@@ -236,7 +277,7 @@ def corner_transition(p1, p2):
 
 transition_funs = {"lane_follow": lane_follow_transition,
                    "cross": cross_transition, "navigate": navigate_transition,
-                   "corner": corner_transition, "lane_follow_cor": lane_follow_transition}
+                   "corner": corner_transition, "lane_follow_cor": lane_follow_transition_cor}
 
 set_nav(x=0, y=0, yaw=0, mode="")
 rospy.sleep(1)
@@ -278,5 +319,5 @@ for point_name in path[3:]:
     prev_point = point_name
     print("INFO", "TO", point_name, "DONE")
     rospy.sleep(0.15)
-navigate_wait(x=0, y=0, yaw=0, speed=0.4,
+navigate_wait(x=0, y=0, yaw=0, speed=0.7,
               frame="nav", stopper=True, mode='')

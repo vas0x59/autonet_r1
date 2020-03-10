@@ -1,10 +1,13 @@
-from time import sleep
+# from time import sleep
 import os
 import cv2
 import math
 import numpy as np
-
-
+import time
+BLACK = ("black", [0, 0, 0])
+GREEN = ("green", [0, 255, 0])
+YELLOW = ("yellow", [0, 255, 255])
+WHITE = ("white", [255, 255, 255])
 class RegLine:
     def __init__(self, img_size=[200, 400]):
         self.img_size = img_size
@@ -84,9 +87,9 @@ class RegLine:
 
     def wrap(self, img):
         M = cv2.getPerspectiveTransform(self.src, self.dst)
-        average = img[150:350, 100:200].mean(axis=0).mean(axis=0)
+        # average = img[150:350, 100:200][0].mean(axis=0)
         warped = cv2.warpPerspective(
-            img, M, (self.outx, self.outy), flags=cv2.INTER_LINEAR, borderValue=(average))
+            img, M, (self.outx, self.outy), flags=cv2.INTER_LINEAR) #, borderValue=(average)
         return warped
 
     def reg_line(self, img, show=False):
@@ -115,7 +118,7 @@ class RegLine:
         if show == True:
             cv2.polylines(allBinary_visual, [self.src_draw], True, 255)
             cv2.imshow("polygon", allBinary_visual)
-
+        
         # M = cv2.getPerspectiveTransform(self.src, self.dst)
         warped = self.wrap(allBinary)
         # warped =
@@ -123,6 +126,7 @@ class RegLine:
         #     cv2.THRESH_BINARY_INV,5,2)
         warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
         # _, warped = cv2.threshold(warped, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+        ts = time.time()
         warped[(warped < 100)] = 100
         img_blur = cv2.medianBlur(warped, 5)
 
@@ -143,9 +147,10 @@ class RegLine:
         # warped = self.thresh(warped)
         # warped = cv2.morphologyEx(warped, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
         warped = cv2.medianBlur(warped, 3)
+        
         # if show == True:
         #     cv2.imshow("warped", warped)
-
+        ts = time.time()
         histogram = np.sum(warped[warped.shape[0]//2:, :], axis=0)
 
         midpoint = histogram.shape[0]//2
@@ -160,7 +165,9 @@ class RegLine:
                      (IndWhitestColumnR, warped_visual.shape[0]), 110, 2)
             # cv2.imshow("WitestColumn", warped_visual)
 
-        nwindows = 9
+
+
+        nwindows = 9 #9
         window_height = np.int(warped.shape[0]/nwindows)
         window_half_width = 65
 
@@ -186,12 +193,12 @@ class RegLine:
             right_win_x1 = XCenterRightWindow - window_half_width
             right_win_x2 = XCenterRightWindow + window_half_width
 
-            if show == True:
-                # cv2.rectangle(out_img, (left_win_x1, win_y1),
-                #               (left_win_x2, win_y2), (50 + window * 21, 0, 0), 2)
-                cv2.rectangle(out_img, (right_win_x1, win_y1),
-                              (right_win_x2, win_y2), (0, 0, 50 + window * 21), 2)
-                # cv2.imshow("windows", out_img)
+
+            # cv2.rectangle(out_img, (left_win_x1, win_y1),
+            #               (left_win_x2, win_y2), (50 + window * 21, 0, 0), 2)
+            # cv2.rectangle(out_img, (right_win_x1, win_y1),
+            #                 (right_win_x2, win_y2), (0, 0, 50 + window * 21), 2)
+            # cv2.imshow("windows", out_img)
 
             # good_left_inds = ((WhitePixelIndY >= win_y1) & (WhitePixelIndY <= win_y2) &
             #                   (WhitePixelIndX >= left_win_x1) & (WhitePixelIndX <= left_win_x2)).nonzero()[0]
@@ -212,8 +219,8 @@ class RegLine:
 
         # out_img[WhitePixelIndY[left_lane_inds],
         #         WhitePixelIndX[left_lane_inds]] = [255, 0, 0]
-        out_img[WhitePixelIndY[right_lane_inds],
-                WhitePixelIndX[right_lane_inds]] = [0, 0, 255]
+        # out_img[WhitePixelIndY[right_lane_inds],
+        #         WhitePixelIndX[right_lane_inds]] = [0, 0, 255]
         # if show == True:
         #     cv2.imshow("Lane", out_img)
 
@@ -222,6 +229,10 @@ class RegLine:
         rightx = WhitePixelIndX[right_lane_inds]
         righty = WhitePixelIndY[right_lane_inds]
         center_fit = []
+        print("CALC TIME", (time.time() - ts) * 1000)
+
+        ts = time.time()
+
         if (len(righty) > 10) and (len(rightx) > 10):
             # left_fit = np.polyfit(lefty, leftx, 2)
             right_fit = np.polyfit(righty, rightx, 2)
@@ -235,7 +246,7 @@ class RegLine:
 
                 # cv2.circle(out_img,(int(gor_ind),int(ver_ind)),2,(255,0,255),1)
                 self.points.append([gor_ind, ver_ind])
-
+        print("Polyfit TIME", (time.time() - ts) * 1000)
         p_s = len(self.points)
         err = 0
         err2 = 0
@@ -277,7 +288,22 @@ class RegLine:
         # if (err < -80 or err > 80) or (su2 > 75000):  # 1866213
         #     err = 0
         #     err2 = 0
+        # y, x
+        ts = time.time()
+        color = "none"
+        croped = allBinary[150:, 50:100]
+        
+        # print(croped)
+        mean_bgr = croped[0].mean(axis=0)
+        s = min([WHITE, GREEN, BLACK, YELLOW], key=lambda x: math.sqrt((x[1][0] - mean_bgr[0])**2 + (x[1][1] - mean_bgr[1])**2 + (x[1][2] - mean_bgr[2])**2))
+        # print(mean_bgr, s[0])
+        color = s[0]
+        # print("COLOR TIME", (time.time() - ts) * 1000)
+        if show == True:
+            cv2.imshow("croped_cross", croped)
         if show == True:
             cv2.imshow("CenterLine", out_img)
             cv2.waitKey(1)
-        return err, err2, out_img  # , su2
+        
+        
+        return err, err2, color, out_img  # , su2

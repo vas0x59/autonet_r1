@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-
+import time
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import cv2
@@ -19,11 +19,14 @@ def img_clb(data):
     out_img = cv_image.copy()
     # cv2.imshow("Image window", cv_image)
     # cv2.waitKey(3)
-    e1, e2, out_img = rl.reg_line(cv_image, show=True)
+    ts = time.time()
+    e1, e2, cl, out_img = rl.reg_line(cv_image, show=False)
+    print("FUL_REG TIME", (time.time() - ts) * 1000)
     lr_msg = LaneRes()
     # lr_msg.color = str(color)
     lr_msg.e1 = e1
     lr_msg.e2 = e2
+    lr_msg.color = cl
     # lr.e1 = 
     res_pub.publish(lr_msg)
     image_pub.publish(bridge.cv2_to_imgmsg(out_img, "bgr8"))
@@ -31,7 +34,7 @@ def img_clb(data):
 
 
 image_sub = rospy.Subscriber(
-    "/camera1/image_raw/throttled", Image, img_clb)
+    "/camera1/image_raw", Image, img_clb)
 
 # ic = image_converter()
 rospy.init_node('image_converter', anonymous=True)
