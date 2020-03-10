@@ -120,13 +120,16 @@ class RegLine:
             cv2.imshow("polygon", allBinary_visual)
         
         # M = cv2.getPerspectiveTransform(self.src, self.dst)
+        ts = time.time()
         warped = self.wrap(allBinary)
+        print("WARP TIME", (time.time() - ts) * 1000)
+        ts = time.time()
         # warped =
         # warped = cv2.adaptiveThreshold(cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY),255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
         #     cv2.THRESH_BINARY_INV,5,2)
         warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
         # _, warped = cv2.threshold(warped, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-        ts = time.time()
+        
         warped[(warped < 100)] = 100
         img_blur = cv2.medianBlur(warped, 5)
 
@@ -150,6 +153,7 @@ class RegLine:
         
         # if show == True:
         #     cv2.imshow("warped", warped)
+        print("Filter TIME", (time.time() - ts) * 1000)
         ts = time.time()
         histogram = np.sum(warped[warped.shape[0]//2:, :], axis=0)
 
