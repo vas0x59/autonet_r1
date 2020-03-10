@@ -9,7 +9,7 @@ GREEN = ("green", [0, 255, 0])
 YELLOW = ("yellow", [0, 255, 255])
 WHITE = ("white", [255, 255, 255])
 class RegLine:
-    def __init__(self, img_size=[100, 200]):
+    def __init__(self, img_size=[200, 400]):
         self.img_size = img_size
         self.points = []
         # self.src = np.float32([[20, 200],
@@ -295,7 +295,8 @@ class RegLine:
         # y, x
         ts = time.time()
         color = "none"
-        croped = allBinary[75:, 25:50]
+        # croped = allBinary[75:, 25:50]
+        croped = allBinary[150:, 50:100]
         
         # # print(croped)
         mean_bgr = croped[0].mean(axis=0)
