@@ -260,7 +260,7 @@ class RegLine:
                 self.points[qq-1][0]), int(self.points[qq-1][1])), 2, (0, 80, 255), 1)
             cv2.circle(out_img, (int((self.points[p_s-1][0]+self.points[qq-1][0])/2), int(
                 self.points[p_s-1][1])), 2, (0, 80, 255), 1)
-            err2 = 320 - \
+            err2 = 160 - \
                 (self.points[p_s-1][0]+self.points[qq-1][0])/2
             err = self.points[p_s-1][0]-self.points[qq-1][0]
             err2 /= self.outx
