@@ -1,0 +1,6 @@
+{
+    "update_rate": 20,
+    "odom_xy_w": 1,
+    "odom_yaw_w": 1,
+    "navx_yaw_w": 0
+}

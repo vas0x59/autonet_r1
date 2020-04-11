@@ -16,11 +16,18 @@
 
 ```
 ## Topics
-/emergency_main type:std_msgs/Bool - аварийная остановка \
-/grab/cmd type:std_msgs/String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки. \
-/odom type:nav_msgs/Odometry - одометрия
-## FILES
-#### TODO
+ * /emergency_main type:std_msgs/Bool - аварийная остановка
+ * /grab/cmd type:std_msgs/String - тут мы ждем сообщение "take" для захвата и "throw" для выгрузки.
+ * /odom type:nav_msgs/Odometry - одометрия 
+ * /cam1/image_raw type:sensor_msgs/Image - камера 1 
+ * /cam2/image_raw type:sensor_msgs/Image - камера 2
+ * /nav type:geometry_msgs/PoseStamped - позиция робота
+ * /cmd_nav type:geometry_msgs/Twist - target speed
+## Launch
+ * motors.launch - запуск системы управления моторами
+ * arduino.launch - запуск работы с arduino 
+ * nav.launch - система навигации 
+ * joy.launch
 ### Arduino
 https://github.com/vas59/autonet_arduino
 ### Hardware
@@ -45,6 +52,8 @@ https://github.com/vas59/autonet_arduino
  - urdf?
 ### Const
 1426 - 1 оборот 
+## FILES
+#### TODO
 ### Code style
 #### PYTHON 3!!!!!!! LINUX!!!!!!!
  - все радикальные изменения делаем в отдельной ветке !!!
@@ -56,11 +65,9 @@ https://github.com/vas59/autonet_arduino
  - реализовывать код в виде мат моделей узлов (манипулятор и колесная база)(все параметры в конфиги))))
 
 ### Архитектура 
-#### TODO
+![GitHub Logo](/readme_data/autonet_soft.png)
 
-\
-\
-\
+---
 by Vasily, Viktor, Dmitrii, Georgy
 ```
     ___       ___       ___       ___   
@@ -70,6 +77,26 @@ by Vasily, Viktor, Dmitrii, Georgy
  \:\  \    \::/\/__/ \:\/:/  / \/_/:/  /
   \:\__\    \:\__\    \::/  /    /:/  / 
    \/__/     \/__/     \/__/     \/__/  
+
+```
+ 
+---
+
+```
+
+
+                                                ___     
+                                               /\  \    
+                                              /::\  \   
+                                             /:/\:\  \  
+                                            /::\~\:\  \ 
+                                           /:/\:\ \:\__\
+                                           \/__\:\/:/  /
+                                                \::/  / 
+                                                /:/  /  
+                                               /:/  /   
+                                               \/__/    
+
 
 ```
 

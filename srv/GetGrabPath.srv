@@ -1,0 +1,6 @@
+string start
+string[] stops
+string end
+---
+string[] path
+string stop

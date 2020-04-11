@@ -1,3 +1,19 @@
 {
-    "python.pythonPath": "/home/vasily/anaconda3/bin/python"
+    "python.pythonPath": "/home/vasily/anaconda3/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": false,
+    "python.linting.enabled": true,
+    "python.autoComplete.extraPaths": [
+        "/home/vasily/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/home/vasily/catkin_ws/devel/lib/python3/dist-packages",
+        "/home/vasily/catkin_ws/install/lib/python3/dist-packages",
+        "/home/vasily/catkin_ws/install/lib/python2.7/dist-packages",
+        "/home/vasily/ros_3_catkin_ws/install_isolated/lib/python3/dist-packages",
+        "/home/vasily/ros_3_catkin_ws/devel_isolated/xacro/lib/python3/dist-packages"
+    ],
+    "python.linting.flake8Args": [
+        "--ignore=E223, E251, E302, E501"
+    ],
+    "python.linting.mypyEnabled": true
+    
 }

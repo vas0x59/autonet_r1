@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find autonet_r1)/launch/viz.launch" />
+    <!-- <include file="$(find autonet_r1)/launch/nav_motors.launch" /> -->
+    <node pkg="rviz" type="rviz" name="rviz_laptop" output="screen" clear_params="true" />
+    
+</launch>

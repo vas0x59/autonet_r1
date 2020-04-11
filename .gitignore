@@ -1,1 +1,8 @@
-.vscode/settings.json
+.vscode/*
+.mypy_cache/*
+.mypy_cache
+.vscode
+.idea/*
+.idea
+*.pyc
+test.data

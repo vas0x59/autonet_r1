@@ -1,2 +1,0 @@
-
-By Dmitrii, Vasily
