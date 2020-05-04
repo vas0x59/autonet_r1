@@ -68,7 +68,7 @@ https://github.com/vas59/autonet_arduino
 ![GitHub Logo](/readme_data/autonet_soft.png)
 
 ---
-by Vasily Yuryev, Viktor, Dmitrii
+by Vasily Yuryev, Dmitrii
 ```
     ___       ___       ___       ___   
    /\__\     /\  \     /\  \     /\__\  
