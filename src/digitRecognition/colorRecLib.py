@@ -13,9 +13,9 @@ class ColorRec:
         h_new = np.median(h) * 2
         s_new = np.median(s)
         v_new = np.median(v)
-        if v_new <= 10:
+        if v_new <= 50:
             self.color = 'black'
-        elif v_new >= 245:
+        elif v_new >= 200 and s_new <= 50:
             self.color = 'white'
         else:
             if h_new >= 30 and h_new < 90:
@@ -30,4 +30,5 @@ class ColorRec:
                 self.color = 'red'
         if show:
             cv.imshow('cropped', cropped)
+        # print(self.color, h_new, s_new, v_new)
         return self.color
