@@ -77,7 +77,9 @@ def navigate_wait(x=0, y=0, yaw=0, speed=0.2, frame="nav", stopper=True, mode=''
 
 # Line
 
-
+lr_e1 = 0
+lr_e2 = 0
+lr_color = "none"
 def lr_clb(data):
     global lr_e1, lr_e2, lr_color
     lr_e1 = data.e1
