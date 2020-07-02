@@ -39,17 +39,22 @@ https://github.com/vas59/autonet_arduino
  - Power supply !!! (for servos and for rpi)
 
 ### Roadmap
- - lanes detector
- - turns
- - crossroads
- - traffic light and road signs
- - navigation
- - payload delivery
- - parking
- - obstacles avoidance
- - debug tool
- - rviz?
- - urdf?
+ - [x] hardware driver
+ - [x] odometry
+ - [x] gazebo
+ - [x] lanes detector
+ - [x] turns
+ - [x] simple crossroads
+ - [x] global path planing
+ - [ ] roundabout (crossroads)
+ - [ ] traffic light and road signs
+ - [ ] navigation
+ - [ ] payload delivery
+ - [ ] parking
+ - [ ] obstacles avoidance
+ - [ ] debug tool
+ - [ ] rviz
+ - [x] urdf
 ### Const
 1426 - 1 оборот 
 ## FILES
