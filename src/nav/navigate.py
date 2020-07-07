@@ -14,7 +14,7 @@ from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3, PoseStamp
 from std_msgs.msg import Float32
 
 from autonet_r1.srv import Navigate, NavigateResponse
-from autonet_r1.src.motors.PID import PID
+from autonet_r1.src.tools.PID import PID
 from autonet_r1.src.tools.tf_tools import *
 TRANSFORM_TIMEOUT = 1
 LOCAL_FRAME = "nav"

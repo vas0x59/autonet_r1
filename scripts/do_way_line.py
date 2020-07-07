@@ -16,7 +16,7 @@ from autonet_r1.src.tools.tf_tools import *
 import autonet_r1.src.tools.calc_trajectory as calc_trajectory
 from autonet_r1.src.nav.coor_conv import *
 #from autonet_r1.src.digitRecognition.rec import *
-from autonet_r1.src.motors.PID import PID
+from autonet_r1.src.tools.PID import PID
 
 start_point = "s1"
 point_to = input("p2")

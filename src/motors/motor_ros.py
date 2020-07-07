@@ -14,7 +14,7 @@ import math
 from Motor2 import Motor
 from Odometry_calc import OdometryCalc
 import json
-from PID import PID
+from autonet_r1.src.tools.PID import PID
 
 
 rospy.init_node('motor_ros', anonymous=True)
