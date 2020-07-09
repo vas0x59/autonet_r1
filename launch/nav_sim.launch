@@ -13,12 +13,14 @@
         <param name="config" value="$(find autonet_r1)/src/nav/navigate_config_sim.json"/>
         <param name="motors_config" value="$(find autonet_r1)/src/motors/config.json"/>
     </node>
-    <node pkg="autonet_r1" type="forward.py" name="forward" output="screen" clear_params="true">
+    <!-- <node pkg="autonet_r1" type="forward.py" name="forward" output="screen" clear_params="true">
         <param name="config" value="$(find autonet_r1)/src/nav/navigate_config_sim.json"/>
         <param name="motors_config" value="$(find autonet_r1)/src/motors/config.json"/>
-    </node>
+    </node> -->
     <node pkg="autonet_r1" type="get_path.py" name="get_path" output="screen" clear_params="true">
         <param name="map" value="$(find autonet_r1)/src/maps/map_1.json"/>
         <param name="map_coordinates" value="$(find autonet_r1)/src/maps/map_coordinates_1.json"/>
     </node>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="cam_frame" args="0 0 0 -1.57 0 -1.57 camera1_link camera1_link_optical"/> <!--yaw pitch roll-->
+     <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="cam_frame" args="0 0 0 0 1.57 0 camera1_link camera1_link_optical"/> -->
 </launch>
