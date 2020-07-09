@@ -50,7 +50,7 @@ r_yaw = 0
 
 # tf_buffer = tf.Buffer()
 tf_listener = tf.TransformListener()
-
+nav_broadcaster = tf.TransformBroadcaster()
 # tf_buffer.
 
 
@@ -112,12 +112,20 @@ while not rospy.is_shutdown():
     # calc()
     # print(nav_state, mode)
     ps_target = PoseStamped()
+    ps_target.header.stamp = rospy.Time.now()
     ps_target.header.frame_id = target_frame
     ps_target.pose.position.x = target_x
     ps_target.pose.position.y = target_y
     ps_target.pose.orientation = Quaternion(*tf.transformations.quaternion_from_euler(
         0, 0, target_yaw))
     ps_target_pub.publish(ps_target)
+    nav_broadcaster.sendTransform(
+        (target_x, target_y, 0.),
+        tf.transformations.quaternion_from_euler(
+        0, 0, target_yaw),
+        rospy.Time.now(),
+        "navigate_target",
+        target_frame)
     if nav_state == "start":
         print(nav_state, mode)
         yaw_to_point = offset_yaw(math.atan2(target_y-r_y, target_x-r_x), 0)
