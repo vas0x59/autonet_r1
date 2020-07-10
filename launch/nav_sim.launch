@@ -22,5 +22,7 @@
         <param name="map_coordinates" value="$(find autonet_r1)/src/maps/map_coordinates_1.json"/>
     </node>
     <node pkg="tf2_ros" type="static_transform_publisher" name="cam_frame" args="0 0 0 -1.57 0 -1.57 camera1_link camera1_link_optical"/> <!--yaw pitch roll-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="footprint" args="0 0 -0.038 0 0 0 base_link base_link_footprint"/>
+
      <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="cam_frame" args="0 0 0 0 1.57 0 camera1_link camera1_link_optical"/> -->
 </launch>
